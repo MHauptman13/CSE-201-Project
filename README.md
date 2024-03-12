@@ -35,6 +35,7 @@ Before you start, ensure you have the following prerequisites installed:
 
 - Python 3.x
 - YFinance library
+- Flask library
 
 ## Usage
 
