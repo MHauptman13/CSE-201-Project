@@ -45,7 +45,7 @@ Before you start, ensure you have the following prerequisites installed:
     python main.py
     ```
 
-2. Open your web browser and navigate to `http://localhost:5000` to access the UI.
+2. The program will open the HTML page for you to access the UI.
 
 3. Explore the various features and tools provided in the UI to visualize and manipulate stock data.
 
