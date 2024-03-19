@@ -1,0 +1,58 @@
+﻿Stock Data Fields
+*** Highlighted Fields are Necessary, others are Optional ***
+
+
+Qualitative Information;
+* 'symbol': 'AAPL'
+* 'shortName': 'Apple Inc.' 
+* 'sector': 'Technology'
+
+
+Price & Relevant Statistics:
+
+
+* 'currentPrice': 169.0 $
+* 'previousClose': 169.12 $
+* 'marketCap': 2609681006592 $
+* 'volume': 66050904 $
+* 'beta': 1.289 #
+* '52WeekChange': 0.12304938 %
+* 'fiftyTwoWeekLow': 147.61 $
+* 'fiftyTwoWeekHigh': 199.62 $
+
+
+Calculated Fields:
+* Daily Percent Change = (currentPrice - previousClose) / previousClose %
+
+
+Analyst Recommendation:
+* 'targetHighPrice': 250.0 $
+* 'targetLowPrice': 158.0 $
+* 'targetMeanPrice': 201.41 $
+* 'recommendationKey': 'buy'
+   * Strong Buy - 1
+   * Buy - 2
+   * Hold - 3
+   * Sell - 4
+   * Strong Sell - 5
+* 'recommendationMean': 2.1
+* 'numberOfAnalystOpinions': 39
+* 'targetMedianPrice': 200.0 $
+
+
+Additional Ratios (May be Used for Filtering):
+* 'quickRatio': 0.92
+* 'currentRatio': 1.073
+* 'debtToEquity': 145.803
+* 'revenuePerShare': 24.648
+* 'returnOnAssets': 0.21181
+* 'returnOnEquity': 1.5426899
+* 'earningsGrowth': 0.16, 
+* 'revenueGrowth': 0.021, 
+* 'grossMargins': 0.45027, 
+* 'ebitdaMargins': 0.33733, 
+* 'operatingMargins': 0.33764, 
+* 'trailingPE': 26.283049, 
+* 'forwardPE': 23.603352
+* 'trailingEps': 6.43
+* 'forwardEps': 7.16
