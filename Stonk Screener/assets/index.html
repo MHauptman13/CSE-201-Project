@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stonk Screener</title>
+
+<style>
+    body {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+    }
+</style>
+
+</head>
+<body>
+
+    <h1>Stonk Screener</h1>
+    <input type="text" id="stockTicker" placeholder="Enter a stock">
+    <button onclick="getStockDetails()">Search</button> <!-- this button opens the page for the detailed view (detail.html) -->
+    <p id="result"></p>
+
+    <script>
+
+        // this function saves the ticker entered in the text box and directs the user to details.html.
+        function getStockDetails() {
+            localStorage.setItem("ticker",document.getElementById("stockTicker").value); // so detail.html knows what stock to get
+            window.location.href = "detail.html"; // moving to detail.html
+        }
+
+    </script>
+
+</body>
+</html>

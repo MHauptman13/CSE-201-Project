@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="title">Details</title>
+
+<style>
+    body {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+    }
+    h1 {
+        margin: 5px;
+    }
+    p {
+        margin: 10px;
+    }
+
+    .stock_company {
+        font-size: 96px;
+    }
+    .stock_ticker {
+        font-size: 54px;
+    }
+    .stock_info {
+        font-size: 36px;
+    }
+    
+    .info_header {
+        font-size: 48px;
+    }
+</style>
+
+</head>
+
+<!-- getting the functions in useful_functions.js -->
+<script src="useful_functions.js"></script>
+
+<body>
+
+    <!-- the bulk of the html page is here -->
+    <h1 id="stock_company" class="stock_company">Loading...</h1>
+    <i><h1 id="stock_ticker" class="stock_ticker"></h1></i>
+    <br>
+    <button onclick="goHome()">Back</button> <!-- this button is to allow the user to go back to the search page (index.html) -->
+
+    <br><br><br>
+
+    <u><h1 id="info_header" class="info_header"></h1></u>
+    <p id="stock_price" class="stock_info"></p>
+    <p id="stock_open" class="stock_info"></p>
+    <p id="stock_high" class="stock_info"></p>
+    <p id="stock_low" class="stock_info"></p>
+    <p id="stock_change" class="stock_info"></p>
+    <p id="stock_marketcap" class="stock_info"></p>
+    <p id="stock_volume" class="stock_info"></p>
+    <p id="stock_beta" class="stock_info"></p>
+
+    <br><br><br>
+
+    <!-- the graph will go here -->
+
+    <br><br><br>
+
+    <u><h1 id="target_header" class="info_header"></h1></u>
+    <p id="target_high" class="stock_info"></p>
+    <p id="target_low" class="stock_info"></p>
+    <p id="target_mean" class="stock_info"></p>
+    <p id="target_median" class="stock_info"></p>
+    <p id="target_action" class="stock_info"></p>
+    <p id="target_action_mean" class="stock_info"></p>
+    <p id="target_analysts" class="stock_info"></p>
+
+    <br><br><br>
+
+    <script>
+
+        // this function starts the interval that updates the stock info every minute.
+        // it is a function so it can be enabled in the console
+        function startUpdating() {
+            console.log("Stock updates are on.");
+            interval = setInterval(()=>getStockInfo(), (60000));
+        }
+        // comment the line of code below out if you're testing and want to save API tokens.
+        startUpdating();
+
+        function getStockInfo() {
+            console.log("Getting stock info...");
+            const stockTicker = localStorage.getItem("ticker");
+            fetch("http://127.0.0.1:5000/getStockInfo", { // executing the getstockprice() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ticker: stockTicker}) // sending stockticker to getstockprice()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once getstockprice() is done
+
+                if (data.info != -1) { // if the stock is 'valid'
+
+                    try { // trying to set HTML tags to their correct info
+
+                        // the percent change variable is pretty long, and making a break in the code also makes
+                        // a break on the website, so the calculation is done here.
+                        // formula is ( (currentPrice - stockOpenPrice) / stockOpenPrice ) * 100
+                        // the reason stockOpenPrice is used is because previousClose would involve getting the past
+                        // days data, but if thats a problem then tell me and i'll make it use that.
+                        let percentChange = format(((data.info["currentPrice"] - data.open) / data.open) * 100);
+
+                        // the left items is for the id of the HTML tags to set their text to.
+                        // the right items are what the tags will say.
+                        let stats = {
+                            "stock_company": `${data.info["shortName"]}`,
+                            "stock_ticker": `NASDAQ: \$${data.info["symbol"]}`,
+                            "stock_price": `Price: \$${format(data.info["currentPrice"])}`,
+                            "stock_open": `Open Price: \$${format(data.open)}`,
+                            "stock_high": `High: \$${format(data.high)}`,
+                            "stock_low": `Low: \$${format(data.low)}`,
+                            "stock_change": `Percent Change: ${percentChange}%`,
+                            "stock_marketcap": `Market Cap: \$${comma(data.info["marketCap"])}`,
+                            "stock_volume": `Volume: \$${comma(data.info["volume"])}`,
+                            "stock_beta": `Beta: ${data.info["beta"]}`,
+                            "target_high": `Target High Price: \$${format(data.info["targetHighPrice"])}`,
+                            "target_low": `Target Low Price: \$${format(data.info["targetLowPrice"])}`,
+                            "target_mean": `Target Mean Price: \$${format(data.info["targetMeanPrice"])}`,
+                            "target_median": `Target Median Price: \$${format(data.info["targetMedianPrice"])}`,
+                            "target_action": `Recommended Action: ${data.info["recommendationKey"].toUpperCase()}`,
+                            "target_action_mean": `Recommendation Mean: ${data.info["recommendationMean"]}`,
+                            "target_analysts": `Number of Analysts: ${comma(data.info["numberOfAnalystOpinions"])}`
+                        };
+
+                        // this for loop goes through all the items in 'stats' above.
+                        // it then changes the HTML element and sets it to its correct text.
+                        // using a for loop to make the code look better.
+                        for (const [element, text] of Object.entries(stats)) {
+                            document.getElementById(element).innerText = text;
+                        }
+
+                        // sets the title of the page to include the stock ticker of the viewed stock
+                        document.getElementById("title").innerText = `${data.info["symbol"]} Details`;
+
+                        // makes the current info and analyst recommendations headers appear
+                        document.getElementById("info_header").innerText = `Current Info`;
+                        document.getElementById("target_header").innerText = `Analyst Recommendations`;
+
+                        console.log("Recieved stock info successfully.");
+
+                    } catch { // if stock actually wasn't valid
+                        // this will happen if the user enters an index fund or something that is in the yfinance database,
+                        // but isn't a traditional stock. For now, it's an error, but maybe could be fixed in the future?
+                        console.warn("Recieved stock info successfully, but it is not a valid stock (most likely an index fund).");
+                        errorText();
+                    }
+                
+                } else { // if invalid stock
+                    // sets error text where needed.
+                    errorText();
+                }
+
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+            });
+        }
+
+        // this function sets the text to display errors to what they need to be.
+        function errorText() {
+            console.error("Failed to recieve stock data.");
+
+            // displaying correct text for errors where needed; i.e. the tab title, company name, and stock ticker.
+            document.getElementById("title").innerText = `Invalid Stock Details`;
+            document.getElementById("stock_company").innerText = `Invalid Stock.`;
+            document.getElementById("stock_ticker").innerText = `Please enter a valid stock.`;
+        }
+
+        // this function removes the stock ticker from the storage for cleanliness, and directs the user back to index.html.
+        function goHome() {
+            localStorage.removeItem("ticker"); // deleting the stock ticker
+            window.location.href = "index.html"; // moving to index.html
+        }
+
+        // gets the stock info at least once to display just in case the updates are off.
+        getStockInfo();
+
+    </script>
+
+</body>
+</html>
