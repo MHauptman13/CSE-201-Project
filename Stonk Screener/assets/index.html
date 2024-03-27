@@ -1,35 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stonk Screener</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Stock GUI Project">
+    <meta name="author" content="DJLM Labs">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-<style>
-    body {
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-    }
-</style>
+    <title>Stonk Screener</title>
 
-</head>
-<body>
+     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
 
-    <h1>Stonk Screener</h1>
-    <input type="text" id="stockTicker" placeholder="Enter a stock">
-    <button onclick="getStockDetails()">Search</button> <!-- this button opens the page for the detailed view (detail.html) -->
-    <p id="result"></p>
+        <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="cover.css" rel="stylesheet">
+  </head>
+
+  <body class="text-center">
+
+    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+      <header class="masthead mb-auto">
+        <div class="inner">
+          <h3 class="masthead-brand">Stonk Screener</h3>
+          <nav class="nav nav-masthead justify-content-center">
+            <a class="nav-link" href="#">Log-In</a>
+            <a class="nav-link" href="#">Watch List</a>
+            <a class="nav-link" href="#">Learn More</a>
+          </nav>
+
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        <h1 class="cover-heading">Search For a Stock</h1>
+        <p class="lead">
+            <input type="text" id="stockTicker" placeholder="Ticker Name">
+            <button onclick="getStockDetails()" class="btn"> <i class="fa fa-search"></i>
+            </button> <!-- this button opens the page for the detailed view (detail.html) -->
+        </p>
+      </main>
+
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+               alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+      </footer>
+    </div>
 
     <script>
-
         // this function saves the ticker entered in the text box and directs the user to details.html.
         function getStockDetails() {
-            localStorage.setItem("ticker",document.getElementById("stockTicker").value); // so detail.html knows what stock to get
+            // so detail.html knows what stock to get
+            localStorage.setItem("ticker",document.getElementById("stockTicker").value);
             window.location.href = "detail.html"; // moving to detail.html
         }
-
     </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="../dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
