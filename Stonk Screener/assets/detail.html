@@ -22,9 +22,6 @@
 
 </head>
 
-<!-- getting the functions in useful_functions.js -->
-<script src="useful_functions.js"></script>
-
 <body class="text-center">
 
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
@@ -41,8 +38,8 @@
       <main role="main" class="inner cover">
         <h1 class="cover-heading">Stock Details</h1>
         <div class="lead" style="display: flex; justify-content: space-between;">
-            <p id="stock_ticker" class="stock_ticker">...</p>
             <p id="stock_company" class="stock_company">Loading...</p>
+            <p id="stock_ticker" class="stock_ticker"></p>
         </div>
         <div class="table">
             <table class="table table-dark table-striped custom-table caption-top">
@@ -90,7 +87,42 @@
                 </tbody>
             </table>
         </div>
-        <!-- the graph will go here -->
+
+
+    <!-- graph code begins here -->
+    <canvas id="graph" class="graph" width="1290px" height="575px"></canvas>
+    <script>
+        const cvas = document.getElementById('graph');
+        const ctx = cvas.getContext('2d');
+        let mousex = 0;
+        let mousey = 0;
+        cvas.addEventListener("mousemove", function(event) {
+            const canvasRect = cvas.getBoundingClientRect();
+            mousex = event.clientX - canvasRect.left;
+            mousey = event.clientY - canvasRect.top;
+        });
+        document.addEventListener("mousedown",(e)=>{
+            let switched = false;
+            for (var i=0;i<buttons.length;i++) {
+                if (buttons[i].highlight) {
+                    buttons[i].clickButton();
+                    switched = true;
+                }
+            }
+            if (switched) {
+                for (var i=0;i<buttons.length;i++) {
+                    if (buttons[i].highlight == false) {
+                        buttons[i].clicked = false;
+                    }
+                }
+            }
+        });
+        function toggleCanvasVisibility() {
+            cvas.style.display = (cvas.style.display === "none") ? "block" : "none";
+        }
+        toggleCanvasVisibility();
+    </script>
+    <!-- graph code ends here -->
           <br><br><br>
         <div class="table">
             <table class="table table-dark table-striped custom-table caption-top">
@@ -155,6 +187,14 @@
         // comment the line of code below out if you're testing and want to save API tokens.
         startUpdating();
 
+        /*
+        Retrieves up-to-date information about a stock from a modern source using an API call.
+        Utilizes the provided stock ticker stored locally and sends it to the server endpoint for data retrieval.
+        Parses the received data and updates the relevant HTML elements with the stock's details.
+        Displays error messages for invalid stocks or encountered errors during the process.
+        */
+        let stockname = 0;
+        let cvasvisible = false;
         function getStockInfo() {
             console.log("Getting stock info...");
             const stockTicker = localStorage.getItem("ticker");
@@ -184,21 +224,21 @@
                         let stats = {
                             "stock_company": `Name: ${data.info["shortName"]}`,
                             "stock_ticker": `Symbol: $${data.info["symbol"]}`,
-                            "stock_price": `$${(data.info["currentPrice"])}`,
-                            "stock_open": `$${(data.open)}`,
-                            "stock_high": `$${(data.high)}`,
-                            "stock_low": `$${(data.low)}`,
-                            "stock_change": `${percentChange}%`,
-                            "stock_marketcap": `$${comma(data.info["marketCap"])}`,
+                            "stock_price": `$${format(data.info["currentPrice"])}`,
+                            "stock_open": `$${format(data.open)}`,
+                            "stock_high": `$${format(data.high)}`,
+                            "stock_low": `$${format(data.low)}`,
+                            "stock_change": `${format(percentChange)}%`,
+                            "stock_marketcap": `$${format(data.info["marketCap"])}`,
                             "stock_volume": `$${comma(data.info["volume"])}`,
                             "stock_beta": `${data.info["beta"]}`,
-                            "target_high": `$${(data.info["targetHighPrice"])}`,
-                            "target_low": `$${(data.info["targetLowPrice"])}`,
-                            "target_mean": `$${(data.info["targetMeanPrice"])}`,
-                            "target_median": `$${(data.info["targetMedianPrice"])}`,
+                            "target_high": `$${format(data.info["targetHighPrice"])}`,
+                            "target_low": `$${format(data.info["targetLowPrice"])}`,
+                            "target_mean": `$${format(data.info["targetMeanPrice"])}`,
+                            "target_median": `$${format(data.info["targetMedianPrice"])}`,
                             "target_action": `${data.info["recommendationKey"].toUpperCase()}`,
                             "target_action_mean": `${data.info["recommendationMean"]}`,
-                            "target_analysts": `${comma(data.info["numberOfAnalystOpinions"])}`
+                            "target_analysts": `${(data.info["numberOfAnalystOpinions"])}`
                         };
 
                         // this for loop goes through all the items in 'stats' above.
@@ -209,7 +249,16 @@
                         }
 
                         // sets the title of the page to include the stock ticker of the viewed stock
-                        document.getElementById("title").innerText = `${data.info["symbol"]} Details`;
+                        //document.getElementById("title").innerText = `${data.info["symbol"]} Details`;
+
+                        // turns on the graph, and gets the 5 past days data as default
+                        if (cvasvisible == false) {
+                            getStockPast("5d");
+                            toggleCanvasVisibility();
+                            cvasvisible = true;
+                        }
+
+                        stockname = data.info["symbol"];
 
                         console.log("Received stock info successfully.");
 
@@ -218,25 +267,73 @@
                         // but isn't a traditional stock. For now, it's an error, but maybe could be fixed in the future?
                         console.warn("Received stock info successfully, but it is not a valid stock (most likely an index fund).");
                         console.error(error.message);
+                        document.querySelectorAll(".table").forEach(table => {
+                            table.style.display = "none";
+                        });
                     }
                 
                 } else { // if invalid stock
                     // sets error text where needed.
                     errorText();
+                    document.querySelectorAll(".table").forEach(table => {
+                        table.style.display = "none";
+                    });
                 }
 
             })
             .catch(error => { // error handling
                 console.error("Error:", error);
+                document.querySelectorAll(".table").forEach(table => {
+                    table.style.display = "none";
+                });
             });
-        }
+        } // end getStockInfo();
+
+        /*
+        Retrieves past stock data for a specified time period from a server endpoint.
+        Fetches historical data for the given stock ticker and time frame.
+        Converts the received date formats for compatibility and sends the processed data to a graph display function.
+        Handles errors encountered during the data retrieval process.
+        */
+        function getStockPast(time) {
+            console.log("Getting past " + str(time) + " data...");
+            const stockTicker = localStorage.getItem("ticker");
+            fetch("http://127.0.0.1:5000/getStockPast", { // executing the getStockPast() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ticker: stockTicker, time: time}) // sending stockticker to server.py()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once the data is recieved
+
+                // for some reason, javascript turns the python dates weird, so this for loop fixes them.
+                let dates = [];
+                for (var i=0;i<data.dates.length;i++) {
+                    tempdate = new Date(data.dates[i] + " EST");
+                    tempdate = tempdate.toLocaleDateString("en-US", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "2-digit"
+                    });
+                    dates.push(tempdate);
+                }
+                giveData(dates,data.values); // sending data to graph.js to be displayed
+
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+            });
+        } // end getStockPast();
 
         // this function sets the text to display errors to what they need to be.
         function errorText() {
             console.error("Failed to receive stock data.");
 
             // displaying correct text for errors where needed; i.e. the tab title, company name, and stock ticker.
-            document.getElementById("stock_company").innerText = `Invalid Stock.`;
+            document.getElementById("stock_company").style.whiteSpace = "pre-wrap";
+            document.getElementById("stock_company").innerText = `Invalid stock. `;
             document.getElementById("stock_ticker").innerText = `Please enter a valid stock.`;
         }
 
@@ -250,6 +347,10 @@
         getStockInfo();
 
     </script>
+
+    <!-- getting the functions in useful_functions.js -->
+    <script src="useful_functions.js"></script>
+    <script src="graph.js"></script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->

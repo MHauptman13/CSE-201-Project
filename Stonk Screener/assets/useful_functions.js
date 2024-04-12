@@ -27,6 +27,20 @@ function comma(x) {
 
 // rounds and applies commas to a number. just here so the code is more readable.
 // returns a string.
-function format(x) {
-    return round(str(comma(x)));
+function format(num) {
+    // convert num to a number if it's a string
+    if (typeof num === 'string') {
+        num = parseFloat(num);
+    }
+    // check if num is a valid number
+    if (isNaN(num)) {
+        return "Invalid input";
+    }
+    // round to two decimal places
+    num = num.toFixed(2);
+
+    // add commas for thousands separator
+    num = parseFloat(num).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+
+    return num;
 }

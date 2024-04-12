@@ -126,7 +126,8 @@ p {
 
 .custom-table {
  table-layout: fixed;
- min-width: 50em;}
+ min-width: 50em;
+}
    .custom-table caption {
     color: MediumOrchid;
     font-size: 25px;
@@ -138,20 +139,23 @@ p {
     color: rgba(255, 255, 255, .5);
     font-size: 18px;
     text-transform: uppercase;
-    letter-spacing: .2rem; }
+    letter-spacing: .2rem; 
+  }
   .custom-table tbody th, .custom-table tbody td {
     color: #fff;
     font-weight: 400;
     padding-bottom: 20px;
     padding-top: 20px;
     font-weight: 300;
-    font-size: 22px
-    border: none;}
+    font-size: 22px;
+    border: none;
+  }
   .custom-table .td-box-wrap {
-    padding: 0; }
+    padding: 0; 
+  }
   .custom-table .box {
     background: #333;
     border-radius: 4px;
     margin-top: 15px;
-    margin-bottom: 15px; }
-}
+    margin-bottom: 15px; 
+  }
