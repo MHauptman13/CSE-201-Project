@@ -99,6 +99,13 @@ body {
   }
 }
 
+ul {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0;
+    height: 200px; /* Set a fixed height for the container */
+    overflow-y: auto; /* Add vertical scrollbar */
+    border: 1px solid #ccc; /* Add border for clarity */
+}
 
 /*
  * Cover

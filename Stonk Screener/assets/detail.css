@@ -124,14 +124,15 @@ p {
     background-color:transparent;
 }
 
+h3 {
+    color: MediumOrchid;
+    font-size: 25px;
+}
+
 .custom-table {
  table-layout: fixed;
  min-width: 50em;
 }
-   .custom-table caption {
-    color: MediumOrchid;
-    font-size: 25px;
-   }
   .custom-table thead tr, .custom-table thead th {
     padding-bottom: 30px;
     border-top: none;
@@ -139,7 +140,7 @@ p {
     color: rgba(255, 255, 255, .5);
     font-size: 18px;
     text-transform: uppercase;
-    letter-spacing: .2rem; 
+    letter-spacing: .2rem;
   }
   .custom-table tbody th, .custom-table tbody td {
     color: #fff;
@@ -151,11 +152,18 @@ p {
     border: none;
   }
   .custom-table .td-box-wrap {
-    padding: 0; 
+    padding: 0;
   }
   .custom-table .box {
     background: #333;
     border-radius: 4px;
     margin-top: 15px;
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
   }
+
+/*
+ * Graph
+ */
+.graph {
+    margin-left:-20%;
+}
