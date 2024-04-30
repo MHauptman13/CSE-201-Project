@@ -9,9 +9,9 @@
 
     <title>Stonk Screener</title>
 
-     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
 
-        <!-- Font Awesome -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <!-- Bootstrap core CSS -->
@@ -19,46 +19,123 @@
 
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
-  </head>
+</head>
 
 <body class="text-center">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand">Stonk Screener</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
-            <a class="nav-link" onclick="goSearch()" href="#">Search</a>
-            <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
-          </nav>
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
+                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
+                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+            </nav>
 
         </div>
-      </header>
+    </header>
 
-        <main role="main" class="inner cover">
+    <main role="main" class="inner cover">
         <h1 class="cover-heading">Top Stocks</h1>
-      </main>
+        <div class="table-wrap">
+            <table class="sortable" id="topStocks">
+                <thead>
+                <tr>
+                    <th>
+                        <button>
+                            Symbol
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <th aria-sort="ascending">
+                        <button>
+                            Name
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <th>
+                        <button>
+                            Market Cap
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <button>
+                        Price
+                        <span aria-hidden="true"></span>
+                    </button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
+            <script>
+                // this function starts the interval that updates the stock info every minute.
+                // it is a function, so it can be enabled in the console
+                function startUpdating() {
+                    console.log("Stock updates are on.");
+                    interval = setInterval(()=>getStockInfo(), (60000));
+                }
+                // comment the line of code below out if you're testing and want to save API tokens.
+                startUpdating();
 
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
-               alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+               <!-- Get 10 stock values based on highest market cap -->
+               var data = [];
+
+               // Function to insert data into the table
+               function insertDataIntoTable() {
+                   var table = document.getElementById("topStocks");
+                   var tbody = table.getElementsByTagName("tbody")[0];
+
+                   // Loop through the data and create a new row for each entry
+                   for (var i = 0; i < data.length; i++) {
+                       var row = tbody.insertRow(i);
+
+                       // Cell for Symbol
+                       var cell1 = row.insertCell(0);
+                       cell1.innerHTML = '$${data[i].info["symbol"]}`;
+
+                       // Cell for company name
+                       var cell2 = row.insertCell(1);
+                       cell2.innerHTML = '${data[i].info["shortName"]}`;
+
+                       // Cell for Market cap
+                       var cell3 = row.insertCell(3)
+                       cell3.innerHTML = `$${format(data[i].info["marketCap"])}`
+
+                       //Cell for price
+                       var cell4 = row.insertCell(4);
+                       cell4.innerHtml = `$${format(data[i].info["currentPrice"])}`;
+                   }
+               }
+               // Call the function to insert data into the table
+               insertDataIntoTable();
+            </script>
         </div>
-      </footer>
-    </div>
 
-    <script>
-        function goWatch() {
-            window.location.href = "watch.html"; // moving to index.html
-        }
-        function goSearch() {
-            window.location.href = "search.html"; // moving to index.html
-        }
-        function goLearn() {
-            window.location.href = "learn.html"; // moving to index.html
-        }
-    </script>
+    </main>
+
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to index.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to index.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to index.html
+    }
+</script>
 
 </body>
 

@@ -24,62 +24,63 @@
 
 <body class="text-center">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand">Stonk Screener</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
-            <a class="nav-link" onclick="goSearch()" href="#">Search</a>
-            <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
-          </nav>
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
+                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
+                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+            </nav>
 
         </div>
-      </header>
+    </header>
 
-      <main role="main" class="inner cover">
+    <main role="main" class="inner cover">
         <h1 class="cover-heading">Search For a Stock</h1>
         <p class="lead">
             <input type="text" id="stockTicker" placeholder="Ticker Name">
-            <button onclick="getStockDetails()" class="btn"> <i class="fa fa-search"></i>
+            <button onclick="getStockDetails()" class="btn"><i class="fa fa-search"></i>
             </button> <!-- this button opens the page for the detailed view (detail.html) -->
         </p>
-      </main>
+    </main>
 
-      <footer class="mastfoot mt-auto">
+    <footer class="mastfoot mt-auto">
         <div class="inner">
-          <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
-               alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
         </div>
-      </footer>
-    </div>
+    </footer>
+</div>
 
-    <script>
-        // this function saves the ticker entered in the text box and directs the user to details.html.
-        function getStockDetails() {
-            // so detail.html knows what stock to get
-            localStorage.setItem("ticker",document.getElementById("stockTicker").value);
-            window.location.href = "detail.html"; // moving to detail.html
-        }
-        function goWatch() {
-            window.location.href = "watch.html"; // moving to index.html
-        }
-        function goSearch() {
-            window.location.href = "search.html"; // moving to index.html
-        }
-        function goLearn() {
-            window.location.href = "learn.html"; // moving to index.html
-        }
-    </script>
+<script>
+    // this function saves the ticker entered in the text box and directs the user to details.html.
+    function getStockDetails() {
+        // so detail.html knows what stock to get
+        localStorage.setItem("ticker",document.getElementById("stockTicker").value);
+        window.location.href = "detail.html"; // moving to detail.html
+    }
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to index.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to index.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to index.html
+    }
+</script>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="js/vendor/popper.min.js"></script>
-    <script src="../dist/js/bootstrap.min.js"></script>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="js/vendor/popper.min.js"></script>
+<script src="../dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
