@@ -12,7 +12,7 @@ from pip._vendor.distlib import database
 db = mysql.connector.connect(
     host = "localhost",
     user = "root",
-    password = "MHaupt20233680!",
+    password = "",
     database = "STONKdb"
     )
 
@@ -40,7 +40,7 @@ Finding a user from the database
 
 
 
-query = "SELECT * FROM user_information WHERE username='mhauptman'"
+query = "SELECT * FROM user_information WHERE username=''"
 
 cursor.execute(query)
 
@@ -73,10 +73,11 @@ print(cursor.rowcount, "record inserted")
 
 '''
 Deleting information from the database
-'''
 
-query = "DELETE FROM user_information WHERE username='ottenwa'"
+
+query = "DELETE FROM user_information WHERE username=''"
 
 cursor.execute(query)
 
 db.commit()
+'''
