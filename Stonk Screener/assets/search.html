@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Stock Details">
+    <meta name="description" content="Stock GUI Project">
     <meta name="author" content="DJLM Labs">
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
 
-    <title>Stock Search</title>
+    <title>Stonk Screener</title>
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
 
@@ -18,8 +18,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="pages.css" rel="stylesheet">
-
+    <link href="cover.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
@@ -39,11 +38,12 @@
 
     <main role="main" class="inner cover">
         <h1 class="cover-heading">Search For a Stock</h1>
-        <p class="lead">
-            <input type="text" id="stockTicker" placeholder="Ticker Name">
+        <div data-mdb-input-init class="form-outline mb-4">
+            <input type="text" id="searchInput" placeholder="Ticker">
             <button onclick="getStockDetails()" class="btn"><i class="fa fa-search"></i>
             </button> <!-- this button opens the page for the detailed view (detail.html) -->
-        </p>
+        </div>
+        <ul id="searchResults"></ul>
     </main>
 
     <footer class="mastfoot mt-auto">
@@ -55,21 +55,100 @@
 </div>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+
+        // Function to update search results based on input value
+        function updateSearchResults(query) {
+            // Clear previous results
+            searchResults.innerHTML = '';
+
+            const simulatedResults = [
+                "MMM","ACE","ABT","ANF","ACN","ADBE","AMD","AES",
+                "AET","AFL","A","GAS","APD","ARG","AKAM","AA",
+                "ALXN","ATI","AGN","ALL","ANR","ALTR","MO","AMZN",
+                "AEE","AEP","AXP","AIG","AMT","AMP","ABC","AMGN",
+                "APH","APC","ADI","AON","APA","AIV","APOL","AAPL",
+                "AMAT","ADM","AIZ","T","ADSK","ADP","AN","AZO",
+                "AVB","AVY","AVP","BHI","BLL","BAC","BK","BCR",
+                "BAX","BBT","BEAM","BDX","BBBY","BMS","BRK.B","BBY",
+                "BIG","BIIB","BLK","HRB","BMC","BA","BWA","BXP",
+                "BSX","BMY","BRCM","BF.B","CHRW","CA","CVC","COG",
+                "CAM","CPB","COF","CAH","CFN","KMX","CCL","CAT",
+                "CBG","CBS","CELG","CNP","CTL","CERN","CF","SCHW",
+                "CHK","CVX","CMG","CB","CI","CINF","CTAS","CSCO",
+                "C","CTXS","CLF","CLX","CME","CMS","COH","KO","CCE",
+                "CTSH","CL","CMCSA","CMA","CSC","CAG","COP","CNX",
+                "ED","STZ","CBE","GLW","COST","CVH","COV","CCI","CSX",
+                "CMI","CVS","DHI","DHR","DRI","DVA","DF","DE","DELL",
+                "DNR","XRAY","DVN","DV","DO","DTV","DFS","DISCA",
+                "DLTR","D","RRD","DOV","DOW","DPS","DTE","DD","DUK",
+                "DNB","ETFC","EMN","ETN","EBAY","ECL","EIX","EW","EA",
+                "EMC","EMR","ESV","ETR","EOG","EQT","EFX","EQR","EL",
+                "EXC","EXPE","EXPD","ESRX","XOM","FFIV","FDO","FAST",
+                "FII","FDX","FIS","FITB","FHN","FSLR","FE","FISV","FLIR",
+                "FLS","FLR","FMC","FTI","F","FRX","FOSL","BEN","FCX",
+                "FTR","GME","GCI","GPS","GD","GE","GIS","GPC","GNW",
+                "GILD","GS","GT","GOO","GWW","HAL","HOG","HAR","HRS",
+                "HIG","HAS","HCP","HCN","HNZ","HP","HES","HPQ","HD",
+                "HON","HRL","HSP","HST","HCBK","HUM","HBAN","ITW",
+                "IR","TEG","INTC","ICE","IBM","IFF","IGT","IP",
+                "IPG","INTU","ISRG","IVZ","IRM","JBL","JEC","JDSU",
+                "JNJ","JCI","JOY","JPM","JNPR","K","KEY","KMB","KIM",
+                "KMI","KLAC","KSS","KFT","KR","LLL","LH","LRCX","LM",
+                "LEG","LEN","LUK","LXK","LIFE","LLY","LTD","LNC",
+                "LLTC","LMT","L","LO","LOW","LSI","MTB","M","MRO",
+                "MPC","MAR","MMC","MAS","MA","MAT","MKC","MCD","MHP",
+                "MCK","MJN","MWV","MDT","MRK","MET","PCS","MCHP","MU",
+                "MSFT","MOLX","TAP","MON","MNST","MCO","MS","MOS",
+                "MSI","MUR","MYL","NBR","NDAQ","NOV","NTAP","NFLX",
+                "NWL","NFX","NEM","NWSA","NEE","NKE","NI","NE","NBL",
+                "JWN","NSC","NTRS","NOC","NU","NRG","NUE","NVDA","NYX",
+                "ORLY","OXY","OMC","OKE","ORCL","OI","PCAR","PLL","PH",
+                "PDCO","PAYX","BTU","JCP","PBCT","POM","PEP","PKI",
+                "PRGO","PFE","PCG","PM","PSX","PNW","PXD","PBI","PCL",
+                "PNC","RL","PPG","PPL","PX","PCP","PCLN","PFG","PG",
+                "PGR","PLD","PRU","PEG","PSA","PHM","QEP","PWR","QCOM",
+                "DGX","RRC","RTN","RHT","RF","RSG","RAI","RHI","ROK",
+                "COL","ROP","ROST","RDC","R","SWY","SAI","CRM","SNDK",
+                "SCG","SLB","SNI","STX","SEE","SHLD","SRE","SHW","SIAL",
+                "SPG","SLM","SJM","SNA","SO","LUV","SWN","SE","S",
+                "STJ","SWK","SPLS","SBUX","HOT","STT","SRCL","SYK","SUN",
+                "STI","SYMC","SYY","TROW","TGT","TEL","TE","THC","TDC",
+                "TER","TSO","TXN","TXT","HSY","TRV","TMO","TIF","TWX",
+                "TWC","TIE","TJX","TMK","TSS","TRIP","TSN","TYC","USB",
+                "UNP","UNH","UPS","X","UTX","UNM","URBN","VFC","VLO",
+                "VAR","VTR","VRSN","VZ","VIAB","V","VNO","VMC","WMT",
+                "WAG","DIS","WPO","WM","WAT","WPI","WLP","WFC","WDC",
+                "WU","WY","WHR","WFM","WMB","WIN","WEC","WPX","WYN",
+                "WYNN","XEL","XRX","XLNX","XL","XYL","YHOO","YUM","ZMH","ZION"
+            ];
+
+            // Filter and display matching results
+            simulatedResults.forEach(result => {
+                if (result.toLowerCase().includes(query.toLowerCase())) {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = result;
+                    searchResults.appendChild(listItem);
+                }
+            });
+        }
+
+        // Event listener for input changes
+        searchInput.addEventListener('input', function() {
+            updateSearchResults(this.value);
+        });
+    });
+
+
     // this function saves the ticker entered in the text box and directs the user to details.html.
     function getStockDetails() {
         // so detail.html knows what stock to get
-        localStorage.setItem("ticker",document.getElementById("stockTicker").value);
+        localStorage.setItem("ticker",document.getElementById("searchInput").value);
         window.location.href = "detail.html"; // moving to detail.html
     }
-    function goWatch() {
-        window.location.href = "watch.html"; // moving to index.html
-    }
-    function goSearch() {
-        window.location.href = "search.html"; // moving to index.html
-    }
-    function goLearn() {
-        window.location.href = "learn.html"; // moving to index.html
-    }
+
 </script>
 
 <!-- Bootstrap core JavaScript

@@ -290,8 +290,6 @@ class Graph {
         // drawing graph zone
         rect(graph_x+graph_t,graph_y,graph_l-graph_t,graph_h-graph_t,173,173,173,1,0);
 
-        text(stockname,"Trebuchet MS",130,540,255,255,255,54,"center",1);
-
         let percentchange = 0;
         try {
             let ratio = data[data.length-1][1] / data[0][1];
@@ -307,11 +305,11 @@ class Graph {
         }
 
         if (percentchange > 0) {
-            text("+" + comma(float(percentchange)) + "%","Trebuchet MS",1160,540,0,200,0,36,"center",1);
+            text("+" + comma(float(percentchange)) + "%","Trebuchet MS",1100,540,0,200,0,36,"center",1);
         } else if (percentchange < 0) {
-            text("" + comma(float(percentchange)) + "%","Trebuchet MS",1160,540,200,0,0,36,"center",1);
+            text("" + comma(float(percentchange)) + "%","Trebuchet MS",1100,540,200,0,0,36,"center",1);
         } else {
-            text("=" + comma(float(percentchange)) + "%","Trebuchet MS",1160,540,200,200,0,36,"center",1);
+            text("=" + comma(float(percentchange)) + "%","Trebuchet MS",1100,540,200,200,0,36,"center",1);
         }
 
         // drawing nodes
@@ -421,8 +419,8 @@ class Button {
     constructor(x,y,type) {
         this.x = x;
         this.y = y;
-        this.l = 100;
-        this.h = 50;
+        this.l = 75;
+        this.h = 45;
         this.type = type;
         this.highlight = false;
         this.clicked = false;
@@ -461,16 +459,16 @@ class Button {
         if (this.highlight == false) {
             rect(this.x,this.y,this.l,this.h,100,100,100,1,0);
             if (this.clicked) {
-                text(this.type,"Trebuchet MS",this.cx,this.cy+12,0,173,255,36,"center",1);
+                text(this.type,"Trebuchet MS",this.cx,this.cy+7,0,173,255,20,"center",1);
             } else {
-                text(this.type,"Trebuchet MS",this.cx,this.cy+12,200,200,200,36,"center",1);
+                text(this.type,"Trebuchet MS",this.cx,this.cy+7,200,200,200,20,"center",1);
             }
         } else {
             rect(this.x,this.y,this.l,this.h,155,155,155,1,0);
             if (this.clicked) {
-                text(this.type,"Trebuchet MS",this.cx,this.cy+12,0,173,255,36,"center",1);
+                text(this.type,"Trebuchet MS",this.cx,this.cy+7,0,173,255,20,"center",1);
             } else {
-                text(this.type,"Trebuchet MS",this.cx,this.cy+12,255,255,255,36,"center",1);
+                text(this.type,"Trebuchet MS",this.cx,this.cy+7,255,255,255,20,"center",1);
             }
         }
     }
