@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Stock GUI Project">
-    <meta name="author" content="DJLM Labs">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
 
     <title>Stonk Screener</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
@@ -28,16 +28,18 @@
         <div class="inner">
             <h3 class="masthead-brand">Stonk Screener</h3>
             <nav class="nav nav-masthead justify-content-center">
-                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
-                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
-                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
             </nav>
 
         </div>
     </header>
 
-    <main role="main" class="inner cover">
+    <main class="inner cover" role="main">
         <h1 class="cover-heading">Top Stocks</h1>
+        <p>Stocks we are watching now!</p>
         <div class="table-wrap">
             <table class="sortable" id="topStocks">
                 <thead>
@@ -61,10 +63,10 @@
                         </button>
                     </th>
                     <th>
-                    <button>
-                        Price
-                        <span aria-hidden="true"></span>
-                    </button>
+                        <button>
+                            Price
+                            <span aria-hidden="true"></span>
+                        </button>
                     </th>
                 </tr>
                 </thead>
@@ -72,71 +74,121 @@
                 <!-- Table body will be populated dynamically -->
                 </tbody>
             </table>
-            <script>
-                // this function starts the interval that updates the stock info every minute.
-                // it is a function, so it can be enabled in the console
-                function startUpdating() {
-                    console.log("Stock updates are on.");
-                    interval = setInterval(()=>getStockInfo(), (60000));
-                }
-                // comment the line of code below out if you're testing and want to save API tokens.
-                startUpdating();
-
-               <!-- Get 10 stock values based on highest market cap -->
-               var data = [];
-
-               // Function to insert data into the table
-               function insertDataIntoTable() {
-                   var table = document.getElementById("topStocks");
-                   var tbody = table.getElementsByTagName("tbody")[0];
-
-                   // Loop through the data and create a new row for each entry
-                   for (var i = 0; i < data.length; i++) {
-                       var row = tbody.insertRow(i);
-
-                       // Cell for Symbol
-                       var cell1 = row.insertCell(0);
-                       cell1.innerHTML = '$${data[i].info["symbol"]}`;
-
-                       // Cell for company name
-                       var cell2 = row.insertCell(1);
-                       cell2.innerHTML = '${data[i].info["shortName"]}`;
-
-                       // Cell for Market cap
-                       var cell3 = row.insertCell(3)
-                       cell3.innerHTML = `$${format(data[i].info["marketCap"])}`
-
-                       //Cell for price
-                       var cell4 = row.insertCell(4);
-                       cell4.innerHtml = `$${format(data[i].info["currentPrice"])}`;
-                   }
-               }
-               // Call the function to insert data into the table
-               insertDataIntoTable();
-            </script>
         </div>
 
     </main>
 
     <footer class="mastfoot mt-auto">
         <div class="inner">
-            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
-                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+            <p><img alt="Stonk Man meme"
+                    class="stonk-image"
+                    src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"> DJLM
+                Labs</p>
         </div>
     </footer>
 </div>
 
 <script>
+    // this function starts the interval that updates the stock info every minute.
+    // it is a function, so it can be enabled in the console
+    function startUpdating() {
+        console.log("Stock updates are on.");
+        interval = setInterval(()=>getStockInfo(), (60000));
+    }
+    // comment the line of code below out if you're testing and want to save API tokens.
+    startUpdating();
+
+    <!-- Chosen stock values -->
+    var datalist = ["MSFT", "AAPL", "NVDA", "GOOGL", "AMZN", "META", "LLY",
+    "TSM", "AVGO", "TSLA", "NVO", "JPM", "V", "WMT", "CNK", "AGL", "WEN", "TXG"];
+
+    // Retrieves stock data for ticker
+    function getStockInfo() {
+        console.log("Getting stock info...");
+        const stockTicker = localStorage.getItem("ticker");
+        fetch("http://127.0.0.1:5000/getStockInfo", { // executing the getstockprice() function from server.py
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ticker: stockTicker}) // sending stockticker to getstockprice()
+        })
+        .then(response => response.json())
+        .then(data => { // this is the code that executes once getstockprice() is done
+
+            if (data.info != -1) { // if the stock is 'valid'
+                try {
+                    var table = document.getElementById("topStocks");
+                    var row = table.insertRow(-1);
+
+                    // Cell for Symbol
+                    var cell1 = row.insertCell(0);
+                    cell1.innerHTML = "$${data.info["symbol"]}";
+
+                    // Cell for company name
+                    var cell2 = row.insertCell(1);
+                    cell2.innerHTML = "${data.info["shortName"]}";
+
+                    // Cell for Market cap
+                    var cell3 = row.insertCell(3)
+                    cell3.innerHTML = "$${format(data.info["marketCap"])}";
+
+                    //Cell for price
+                    var cell4 = row.insertCell(4);
+                    cell4.innerHtml = "$${format(data.info["currentPrice"])}";
+
+                    console.log("Received stock info successfully.");
+
+                } catch (error) { // if stock actually wasn't valid
+                    console.warn("Received stock info successfully, but it is not a valid stock (most likely an index fund).");
+                    console.error(error.message);
+                    document.querySelectorAll(".table").forEach(table => {
+                        table.style.display = "none";
+                    });
+                }
+            } else { // if invalid stock
+                // sets error text where needed.
+                errorText();
+                document.querySelectorAll(".table").forEach(table => {
+                    table.style.display = "none";
+                });
+            }
+
+        })
+        .catch(error => { // error handling
+            console.error("Error:", error);
+            document.querySelectorAll(".table").forEach(table => {
+                table.style.display = "none";
+            });
+        });
+    } // end getStockInfo();
+
+    for (var i = 0; i < datalist.length; i++){
+        localStorage.setItem("ticker",datalist[i].value);
+        getStockInfo();
+        localStorage.removeItem("ticker"); // deleting the stock ticker
+    }
+
+</script>
+
+<script src="useful_functions.js"></script>
+
+<!-- Navigation -->
+<script>
+    function goHome() {
+        window.location.href = "index.html"; // moving to index.html
+    }
     function goWatch() {
-        window.location.href = "watch.html"; // moving to index.html
+        window.location.href = "watch.html"; // moving to watch.html
     }
     function goSearch() {
-        window.location.href = "search.html"; // moving to index.html
+        window.location.href = "search.html"; // moving to search.html
     }
     function goLearn() {
-        window.location.href = "learn.html"; // moving to index.html
+        window.location.href = "learn.html"; // moving to learn.html
     }
 </script>
 
 </body>
+</html>
 

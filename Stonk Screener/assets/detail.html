@@ -24,13 +24,16 @@
 
 <body class="text-center">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
         <div class="inner">
-          <h2 class="masthead-brand">Stonk Screener</h2>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" onclick="goHome()" href="#">Home</a>
-          </nav>
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" onclick="goHome()" href="#">Home</a>
+                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
+                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
+                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+            </nav>
 
         </div>
       </header>
@@ -351,6 +354,19 @@
     <!-- getting the functions in useful_functions.js -->
     <script src="useful_functions.js"></script>
     <script src="graph.js"></script>
+
+    <!-- Navigation -->
+    <script>
+        function goWatch() {
+            window.location.href = "watch.html"; // moving to watch.html
+        }
+        function goSearch() {
+            window.location.href = "search.html"; // moving to search.html
+        }
+        function goLearn() {
+            window.location.href = "learn.html"; // moving to learn.html
+        }
+    </script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
