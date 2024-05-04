@@ -24,13 +24,17 @@
 
 <body class="text-center">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
         <div class="inner">
-          <h2 class="masthead-brand">Stonk Screener</h2>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" onclick="goHome()" href="#">Home</a>
-          </nav>
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" onclick="goHome()" href="#">Home</a>
+                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
+                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
+                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+                <a class="nav-link" onclick="toggleLearnerMode()" href="#">Toggle Learner Mode</a>
+            </nav>
 
         </div>
       </header>
@@ -42,8 +46,8 @@
             <p id="stock_ticker" class="stock_ticker"></p>
         </div>
         <div class="table">
+            <h3>Current Info</h3>
             <table class="table table-dark table-striped custom-table caption-top">
-                <caption>Current Info</caption>
                 <thead>
                     <tr>
                         <th scope="col">Attribute</th>
@@ -52,36 +56,36 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">Price</th>
+                        <th scope="row" id="price">Price</th>
                         <td id="stock_price" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Open Price</th>
+                        <th scope="col" id="openprice">Open Price</th>
                         <td id="stock_open" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">High</th>
+                        <th scope="col" id="high">High</th>
                         <td id="stock_high" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Low</th>
+                        <th scope="col" id="low">Low</th>
                         <td id="stock_low" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Percent Change</th>
+                        <th scope="col" id="change">Percent Change</th>
                         <td id="stock_change" class="stock_info"></td>
 
                     </tr>
                     <tr>
-                        <th scope="col">Market Cap</th>
+                        <th scope="col" id="cap">Market Cap</th>
                         <td id="stock_marketcap" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Volume</th>
+                        <th scope="col" id="volume">Volume</th>
                         <td id="stock_volume" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Beta</th>
+                        <th scope="col" id="beta">Beta</th>
                         <td id="stock_beta" class="stock_info"></td>
                     </tr>
                 </tbody>
@@ -125,8 +129,8 @@
     <!-- graph code ends here -->
           <br><br><br>
         <div class="table">
+            <h3>Analyst Recommendations</h3>
             <table class="table table-dark table-striped custom-table caption-top">
-                <caption class="table-header">Analyst Recommendations</caption>
                 <thead>
                     <tr>
                         <th scope="col">Attribute</th>
@@ -135,32 +139,32 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <th scope="row">Target High Price</th>
+                        <th scope="row" id="targethigh">Target High Price</th>
                         <td id="target_high" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Target Low Price</th>
+                        <th scope="col" id="targetlow">Target Low Price</th>
                         <td id="target_low" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Target Mean Price</th>
+                        <th scope="col" id="targetmean">Target Mean Price</th>
                         <td id="target_mean" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Target Median Price</th>
+                        <th scope="col" id="targetmedian">Target Median Price</th>
                         <td id="target_median" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Recommended Action</th>
+                        <th scope="col" id="action">Recommended Action</th>
                         <td id="target_action" class="stock_info"></td>
 
                     </tr>
                     <tr>
-                        <th scope="col">Recommendation Mean</th>
+                        <th scope="col" id="recmean">Recommendation Mean</th>
                         <td id="target_action_mean" class="stock_info"></td>
                     </tr>
                     <tr>
-                        <th scope="col">Number of Analysts</th>
+                        <th scope="col" id="numanalysts">Number of Analysts</th>
                         <td id="target_analysts" class="stock_info"></td>
                     </tr>
                 </tbody>
@@ -177,6 +181,54 @@
     </div>
 
     <script>
+        try {
+            var learnerMode = localStorage.getItem("learnermode");
+            if (learnerMode == "false") {
+                let ids = {
+                    "price": ``,
+                    "openprice": ``,
+                    "high": ``,
+                    "low": ``,
+                    "change": ``,
+                    "cap": ``,
+                    "volume": ``,
+                    "beta": ``,
+                    "targethigh": ``,
+                    "targetlow": ``,
+                    "targetmean": ``,
+                    "targetmedian": ``,
+                    "action": ``,
+                    "recmean": ``,
+                    "numanalysts": ``
+                };
+                for (const [element, text] of Object.entries(ids)) {
+                    document.getElementById(element).title = text;
+                }
+            } else {
+                let ids = {
+                    "price": `The price at which a stock is trading during the current trading session.`,
+                    "openprice": `The price at which a stock first trades upon the opening of an exchange on a trading day.`,
+                    "high": `The highest price at which a stock trades during a single trading day.`,
+                    "low": `The lowest price at which a stock trades during a single trading day.`,
+                    "change": `The percentage change in the stock's price as compared to the previous day's closing price.`,
+                    "cap": `The total market value of a company's outstanding shares of stock, calculated as current stock price times the total number of outstanding shares.`,
+                    "volume": `The total number of shares that have been traded during a specific time period. Volume is a key indicator of a security's liquidity and the level of activity or interest that traders have in it during a given time frame.`,
+                    "beta": `A measure of a stock's volatility in relation to the overall market. A beta greater than 1 indicates that the stock is more volatile than the market, while a beta less than 1 indicates that the stock is less volatile.`,
+                    "targethigh": `The highest price level predicted by analysts for the stock.`,
+                    "targetlow": `The lowest price level predicted by analysts for the stock.`,
+                    "targetmean": `The average price target set by analysts for the stock.`,
+                    "targetmedian": `The median price target set by analysts for the stock.`,
+                    "action": `Financial analysts give recommendations on stocks based on their research.`,
+                    "recmean": `The recommendation mean refers to the average of analyst recommendations for a particular stock, typically ranging from "buy" to "sell," indicating overall sentiment towards its investment potential.`,
+                    "numanalysts": `The total number of analysts who have provided ratings or forecasts for the stock.`
+                };
+                for (const [element, text] of Object.entries(ids)) {
+                    document.getElementById(element).title = text;
+                }
+            }
+        } catch (error) {
+            console.error("Error toggling learner mode:", error);
+        }
 
         // this function starts the interval that updates the stock info every minute.
         // it is a function, so it can be enabled in the console
@@ -215,8 +267,8 @@
                         // the percent change variable is pretty long, and making a break in the code also makes
                         // a break on the website, so the calculation is done here.
                         // formula is ( (currentPrice - stockOpenPrice) / stockOpenPrice ) * 100
-                        // the reason stockOpenPrice is used is because previousClose would involve getting the past
-                        // days data, but if thats a problem then tell me and i'll make it use that.
+                        // the reason stockOpenPrice is used because previousClose would involve getting the past
+                        // days data, but if that's a problem then tell me, and I'll make it use that.
                         let percentChange = (((data.info["currentPrice"] - data.open) / data.open) * 100);
 
                         // the left items is for the id of the HTML tags to set their text to.
@@ -271,7 +323,7 @@
                             table.style.display = "none";
                         });
                     }
-                
+
                 } else { // if invalid stock
                     // sets error text where needed.
                     errorText();
@@ -351,6 +403,71 @@
     <!-- getting the functions in useful_functions.js -->
     <script src="useful_functions.js"></script>
     <script src="graph.js"></script>
+
+    <!-- Navigation -->
+    <script>
+        function goWatch() {
+            window.location.href = "watch.html"; // moving to watch.html
+        }
+        function goSearch() {
+            window.location.href = "search.html"; // moving to search.html
+        }
+        function goLearn() {
+            window.location.href = "learn.html"; // moving to learn.html
+        }
+        function toggleLearnerMode() {
+            try {
+                var learnerMode = localStorage.getItem("learnermode");
+                if (learnerMode == "true") { // setting to false
+                    localStorage.setItem("learnermode", "false");
+                    let ids = {
+                        "price": ``,
+                        "openprice": ``,
+                        "high": ``,
+                        "low": ``,
+                        "change": ``,
+                        "cap": ``,
+                        "volume": ``,
+                        "beta": ``,
+                        "targethigh": ``,
+                        "targetlow": ``,
+                        "targetmean": ``,
+                        "targetmedian": ``,
+                        "action": ``,
+                        "recmean": ``,
+                        "numanalysts": ``
+                    };
+                    for (const [element, text] of Object.entries(ids)) {
+                        document.getElementById(element).title = text;
+                    }
+                } else { // setting to true
+                    localStorage.setItem("learnermode", "true");
+                    let ids = {
+                        "price": `The price at which a stock is trading during the current trading session.`,
+                        "openprice": `The price at which a stock first trades upon the opening of an exchange on a trading day.`,
+                        "high": `The highest price at which a stock trades during a single trading day.`,
+                        "low": `The lowest price at which a stock trades during a single trading day.`,
+                        "change": `The percentage change in the stock's price as compared to the previous day's closing price.`,
+                        "cap": `The total market value of a company's outstanding shares of stock, calculated as current stock price times the total number of outstanding shares.`,
+                        "volume": `The total number of shares that have been traded during a specific time period. Volume is a key indicator of a security's liquidity and the level of activity or interest that traders have in it during a given time frame.`,
+                        "beta": `A measure of a stock's volatility in relation to the overall market. A beta greater than 1 indicates that the stock is more volatile than the market, while a beta less than 1 indicates that the stock is less volatile.`,
+                        "targethigh": `The highest price level predicted by analysts for the stock.`,
+                        "targetlow": `The lowest price level predicted by analysts for the stock.`,
+                        "targetmean": `The average price target set by analysts for the stock.`,
+                        "targetmedian": `The median price target set by analysts for the stock.`,
+                        "action": `Financial analysts give recommendations on stocks based on their research.`,
+                        "recmean": `The recommendation mean refers to the average of analyst recommendations for a particular stock, typically ranging from "buy" to "sell," indicating overall sentiment towards its investment potential.`,
+                        "numanalysts": `The total number of analysts who have provided ratings or forecasts for the stock.`
+                    };
+                    for (const [element, text] of Object.entries(ids)) {
+                        document.getElementById(element).title = text;
+                    }
+                }
+            } catch (error) {
+                console.error("Error toggling learner mode:", error);
+            }
+        }
+    </script>
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
