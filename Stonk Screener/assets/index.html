@@ -2,74 +2,278 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Stock GUI Project">
-    <meta name="author" content="DJLM Labs">
-    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
 
     <title>Stonk Screener</title>
 
-     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
 
-        <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Bootstrap core CSS -->
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="cover.css" rel="stylesheet">
-  </head>
+</head>
 
-  <body class="text-center">
+<body class="text-center">
 
-    <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
-      <header class="masthead mb-auto">
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
         <div class="inner">
-          <h3 class="masthead-brand">Stonk Screener</h3>
-          <nav class="nav nav-masthead justify-content-center">
-            <a class="nav-link" href="#">Log-In</a>
-            <a class="nav-link" href="#">Watch List</a>
-            <a class="nav-link" href="#">Learn More</a>
-          </nav>
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
+            </nav>
 
         </div>
-      </header>
+    </header>
 
-      <main role="main" class="inner cover">
-        <h1 class="cover-heading">Search For a Stock</h1>
-        <p class="lead">
-            <input type="text" id="stockTicker" placeholder="Ticker Name">
-            <button onclick="getStockDetails()" class="btn"> <i class="fa fa-search"></i>
-            </button> <!-- this button opens the page for the detailed view (detail.html) -->
-        </p>
-      </main>
-
-      <footer class="mastfoot mt-auto">
-        <div class="inner">
-          <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
-               alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+    <main class="inner cover" role="main">
+        <h1 class="cover-heading">Top Stocks</h1>
+        <p id="subtext">Loading...</p>
+        <div class="table-wrap">
+            <table class="sortable" id="topStocks">
+                <thead>
+                <tr>
+                    <th>
+                        <button>
+                            Symbol
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <th aria-sort="ascending">
+                        <button>
+                            Name
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <th>
+                        <button>
+                            Market Cap
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                    <th>
+                        <button>
+                            Price
+                            <span aria-hidden="true"></span>
+                        </button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Table body will be populated dynamically -->
+                </tbody>
+            </table>
         </div>
-      </footer>
-    </div>
 
-    <script>
-        // this function saves the ticker entered in the text box and directs the user to details.html.
-        function getStockDetails() {
-            // so detail.html knows what stock to get
-            localStorage.setItem("ticker",document.getElementById("stockTicker").value);
-            window.location.href = "detail.html"; // moving to detail.html
+    </main>
+
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img alt="Stonk Man meme"
+                    class="stonk-image"
+                    src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"> DJLM
+                Labs</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+
+    // the stock class allows simple storage of key info for a stock.
+    class Stock {
+        constructor(symbol, name, marketCap, currentPrice) {
+            this.symbol = symbol;
+            this.name = name;
+            this.marketCap = parseInt(marketCap);
+            this.currentPrice = parseFloat(currentPrice);
         }
-    </script>
+        toString() { // prints a stock in a readable way
+            console.log(this.name + " - $" + this.symbol + "\n" +
+                        "Price: $" + format(this.currentPrice) + "\n" + 
+                        "Market Cap: $" + format(this.marketCap));
+        }
+    }
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="js/vendor/popper.min.js"></script>
-    <script src="../dist/js/bootstrap.min.js"></script>
+    // Retrieves stock data for ticker, stores it, and moves on
+    function getStock(stock) {
+        console.log("Loading top stocks...");
+        fetch("http://127.0.0.1:5000/getStock", { // executing the getStock() function from server.py
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ticker: stock}) // sending ticker to getStock()
+        })
+        .then(response => response.json())
+        .then(data => { // this is the code that executes once getStock() is done
+
+            if (data.info != -1) { // if the stock is 'valid'
+                try {
+                    
+                    stocks.push(new Stock(data.info["symbol"],
+                                          data.info["shortName"],
+                                          data.info["marketCap"],
+                                          data.info["currentPrice"]));
+                    iterator++;
+                    if (iterator < datalist.length) {
+                        getStock(datalist[iterator]);
+                    } else {
+                        organizeStocks();
+                    }
+
+                } catch (error) { // if stock actually wasn't valid
+                    console.warn("Received stock info successfully, but it is not a valid stock (is it an index fund?)");
+                    console.error(error.message);
+                }
+            } else { // if invalid stock
+                console.error("Invalid stock.");
+            }
+
+        })
+        .catch(error => { // error handling
+            console.error("Error:", error);
+        });
+    } // end getStock();
+
+    function symbolSort(stocks,ascending) { // sorts a list of stocks by symbol
+        if (ascending) {
+            return stocks.sort((a, b) => a.symbol.localeCompare(b.symbol));
+        } else {
+            return stocks.sort((a, b) => b.symbol.localeCompare(a.symbol));
+        }
+    }
+    function nameSort(stocks,ascending) { // sorts a list of stocks by the company name
+        if (ascending) {
+            return stocks.sort((a, b) => a.name.localeCompare(b.name));
+        } else {
+            return stocks.sort((a, b) => b.name.localeCompare(a.name));
+        }
+    }
+    function capSort(stocks, ascending) { // sorts a list of stocks by market cap
+        if (ascending) {
+            return stocks.sort((a, b) => a.marketCap - b.marketCap);
+        } else {
+            return stocks.sort((a, b) => b.marketCap - a.marketCap);
+        }
+    }
+    function priceSort(stocks, ascending) { // sorts a list of stocks by price
+        if (ascending) {
+            return stocks.sort((a, b) => a.currentPrice - b.currentPrice);
+        } else {
+            return stocks.sort((a, b) => b.currentPrice - a.currentPrice);
+        }
+    }
+
+    function organizeStocks() {
+        var sortedStocks = [];
+        switch(sortType) {
+            case "symbolAscending":
+                sortedStocks = symbolSort(stocks,true);
+                break;
+            case "symbolDescending":
+                sortedStocks = symbolSort(stocks,false);
+                break;
+            case "nameAscending":
+                sortedStocks = nameSort(stocks,true);
+                break;
+            case "nameDescending":
+                sortedStocks = nameSort(stocks,false);
+                break;
+            case "marketCapAscending":
+                sortedStocks = capSort(stocks,true);
+                break;
+            case "marketCapDescending":
+                sortedStocks = capSort(stocks,false);
+                break;
+            case "currentPriceAscending":
+                sortedStocks = priceSort(stocks,true);
+                break;
+            case "currentPriceDescending":
+                sortedStocks = priceSort(stocks,false);
+                break;
+        }
+        for (var i=0;i<sortedStocks.length;i++) {
+            
+            // uncomment the line below to see the stocks actually sorted in the console
+            //console.log(sortedStocks[i].toString());
+
+            var table = document.getElementById("topStocks");
+            var row = table.insertRow(-1);
+
+            // Cell for Symbol
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = `$${sortedStocks[i].symbol}`;
+
+            // Cell for company name
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = `${sortedStocks[i].name}`;
+
+            // stuff commented out below because it breaks the code and idk why
+            /*// Cell for Market cap
+            var cell3 = row.insertCell(3)
+            cell3.innerHTML = `$${format(sortedStocks[i].marketCap)}`;
+
+            // Cell for price
+            var cell4 = row.insertCell(4);
+            cell4.innerHtml = `$${format(sortedStocks[i].currentPrice)}`;*/
+
+        }
+        document.getElementById("subtext").innerText = "Stocks we are watching now!";
+    }
+
+    // Options:
+    //    symbolAscending, symbolDescending, 
+    //    nameAscending, nameDescending, 
+    //    marketCapAscending, marketCapDescending, 
+    //    currentPriceAscending, currentPriceDescending
+    var sortType = "symbolAscending";
+
+    var datalist = ["MSFT", "AAPL", "NVDA", "GOOGL", "AMZN", "META", "LLY",
+    "TSM", "AVGO", "TSLA", "NVO", "JPM", "V", "WMT", "CNK", "AGL", "WEN", "TXG"];
+
+    var stocks = [];
+    var iterator = 0;
+    function displayStocks(sort) {
+        // this code here needs to either refresh the page, which means storing 'sortType' as a localStorage
+        // or
+        // needs to make the table diplaying stuff reset to have nothing in it.
+        sortType = sort;
+        stocks = [];
+        iterator = 0;
+        getStock(datalist[iterator]);
+    }
+    displayStocks("symbolAscending");
+
+</script>
+
+<script src="useful_functions.js"></script>
+
+<!-- Navigation -->
+<script>
+    function goHome() {
+        window.location.href = "index.html"; // moving to index.html
+    }
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to watch.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to search.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to learn.html
+    }
+</script>
 
 </body>
 </html>
