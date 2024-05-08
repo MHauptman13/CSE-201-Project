@@ -18,7 +18,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
+    <link href="stonkStyles.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
@@ -37,41 +37,54 @@
         </div>
     </header>
 
-    <main class="inner cover" role="main">
+    <main role="main" class="inner cover">
         <h1 class="cover-heading">Top Stocks</h1>
         <p id="subtext">Loading...</p>
-        <div class="table-wrap">
-            <table class="sortable" id="topStocks">
+        <br>
+        <div class = "dropdown">
+            <button onclick="sortFunction()" class="dropbtn">Filter</button>
+            <div id="filterOptions" class="dropdown-content">
+                <a onclick='displayStocks("symbolDescending")'>Symbols Z-A</a>
+                <a onclick='displayStocks("symbolAscending")'>Symbols A-Z</a>
+                <a onclick='displayStocks("nameDescending")'>Names Z-A</a>
+                <a onclick='displayStocks("nameAscending")'>Names A-Z</a>
+                <a onclick='displayStocks("marketCapDescending")'>Market Cap High-Low</a>
+                <a onclick='displayStocks("marketCapAscending")'>Market Cap Low-High</a>
+                <a onclick='displayStocks("currentPriceDescending")'>Price High-Low</a>
+                <a onclick='displayStocks("currentPriceAscending")'>Price Low-High</a>
+            </div>
+        </div>
+        <br>
+        <div class="table">
+            <table class="table table-dark table-striped custom-table sortable" id="topStocks">
                 <thead>
-                <tr>
-                    <th>
-                        <button>
-                            Symbol
-                            <span aria-hidden="true"></span>
-                        </button>
-                    </th>
-                    <th aria-sort="ascending">
-                        <button>
-                            Name
-                            <span aria-hidden="true"></span>
-                        </button>
-                    </th>
-                    <th>
-                        <button>
-                            Market Cap
-                            <span aria-hidden="true"></span>
-                        </button>
-                    </th>
-                    <th>
-                        <button>
-                            Price
-                            <span aria-hidden="true"></span>
-                        </button>
-                    </th>
-                </tr>
+                    <tr>
+                        <th scope="col">Symbol</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Market Cap</th>
+                        <th scope="col">Price</th>
+                    </tr>
                 </thead>
-                <tbody>
+                <tbody id="stockData">
                 <!-- Table body will be populated dynamically -->
+                    <tr id="1"></tr>
+                    <tr id="2"></tr>
+                    <tr id="3"></tr>
+                    <tr id="4"></tr>
+                    <tr id="5"></tr>
+                    <tr id="6"></tr>
+                    <tr id="7"></tr>
+                    <tr id="8"></tr>
+                    <tr id="9"></tr>
+                    <tr id="10"></tr>
+                    <tr id="11"></tr>
+                    <tr id="12"></tr>
+                    <tr id="13"></tr>
+                    <tr id="14"></tr>
+                    <tr id="15"></tr>
+                    <tr id="16"></tr>
+                    <tr id="17"></tr>
+                    <tr id="18"></tr>
                 </tbody>
             </table>
         </div>
@@ -80,10 +93,9 @@
 
     <footer class="mastfoot mt-auto">
         <div class="inner">
-            <p><img alt="Stonk Man meme"
-                    class="stonk-image"
-                    src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"> DJLM
-                Labs</p>
+            <p><img alt="Stonk Man meme" class="stonk-image"
+                    src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp">
+                DJLM Labs</p>
         </div>
     </footer>
 </div>
@@ -120,7 +132,6 @@
 
             if (data.info != -1) { // if the stock is 'valid'
                 try {
-                    
                     stocks.push(new Stock(data.info["symbol"],
                                           data.info["shortName"],
                                           data.info["marketCap"],
@@ -146,87 +157,55 @@
         });
     } // end getStock();
 
-    function symbolSort(stocks,ascending) { // sorts a list of stocks by symbol
-        if (ascending) {
-            return stocks.sort((a, b) => a.symbol.localeCompare(b.symbol));
-        } else {
-            return stocks.sort((a, b) => b.symbol.localeCompare(a.symbol));
-        }
-    }
-    function nameSort(stocks,ascending) { // sorts a list of stocks by the company name
-        if (ascending) {
-            return stocks.sort((a, b) => a.name.localeCompare(b.name));
-        } else {
-            return stocks.sort((a, b) => b.name.localeCompare(a.name));
-        }
-    }
-    function capSort(stocks, ascending) { // sorts a list of stocks by market cap
-        if (ascending) {
-            return stocks.sort((a, b) => a.marketCap - b.marketCap);
-        } else {
-            return stocks.sort((a, b) => b.marketCap - a.marketCap);
-        }
-    }
-    function priceSort(stocks, ascending) { // sorts a list of stocks by price
-        if (ascending) {
-            return stocks.sort((a, b) => a.currentPrice - b.currentPrice);
-        } else {
-            return stocks.sort((a, b) => b.currentPrice - a.currentPrice);
-        }
-    }
-
     function organizeStocks() {
         var sortedStocks = [];
         switch(sortType) {
             case "symbolAscending":
-                sortedStocks = symbolSort(stocks,true);
+                sortedStocks = stocks.sort((a, b) => a.symbol.localeCompare(b.symbol));
                 break;
             case "symbolDescending":
-                sortedStocks = symbolSort(stocks,false);
+                sortedStocks = stocks.sort((a, b) => b.symbol.localeCompare(a.symbol));
                 break;
             case "nameAscending":
-                sortedStocks = nameSort(stocks,true);
+                sortedStocks = stocks.sort((a, b) => a.name.localeCompare(b.name));
                 break;
             case "nameDescending":
-                sortedStocks = nameSort(stocks,false);
+                sortedStocks = stocks.sort((a, b) => b.name.localeCompare(a.name));
                 break;
             case "marketCapAscending":
-                sortedStocks = capSort(stocks,true);
+                sortedStocks = stocks.sort((a, b) => a.marketCap - b.marketCap);
                 break;
             case "marketCapDescending":
-                sortedStocks = capSort(stocks,false);
+                sortedStocks = stocks.sort((a, b) => b.marketCap - a.marketCap);
                 break;
             case "currentPriceAscending":
-                sortedStocks = priceSort(stocks,true);
+                sortedStocks = stocks.sort((a, b) => a.currentPrice - b.currentPrice);
                 break;
             case "currentPriceDescending":
-                sortedStocks = priceSort(stocks,false);
+                sortedStocks = stocks.sort((a, b) => b.currentPrice - a.currentPrice);
                 break;
         }
-        for (var i=0;i<sortedStocks.length;i++) {
-            
-            // uncomment the line below to see the stocks actually sorted in the console
+
+        for (var i = 0; i < 18; i++) {
+            var row = document.getElementById(i + 1)
+
             //console.log(sortedStocks[i].toString());
 
-            var table = document.getElementById("topStocks");
-            var row = table.insertRow(-1);
-
             // Cell for Symbol
-            var cell1 = row.insertCell(0);
+            var cell1 = row.cells.item(0);
             cell1.innerHTML = `$${sortedStocks[i].symbol}`;
 
             // Cell for company name
-            var cell2 = row.insertCell(1);
+            var cell2 = row.cells.item(1);
             cell2.innerHTML = `${sortedStocks[i].name}`;
 
-            // stuff commented out below because it breaks the code and idk why
-            /*// Cell for Market cap
-            var cell3 = row.insertCell(3)
+            // Cell for Market cap
+            var cell3 = row.cells.item(2)
             cell3.innerHTML = `$${format(sortedStocks[i].marketCap)}`;
 
             // Cell for price
-            var cell4 = row.insertCell(4);
-            cell4.innerHtml = `$${format(sortedStocks[i].currentPrice)}`;*/
+            var cell4 = row.cells.item(3);
+            cell4.innerHTML = `$${format(sortedStocks[i].currentPrice)}`;
 
         }
         document.getElementById("subtext").innerText = "Stocks we are watching now!";
@@ -245,15 +224,34 @@
     var stocks = [];
     var iterator = 0;
     function displayStocks(sort) {
-        // this code here needs to either refresh the page, which means storing 'sortType' as a localStorage
-        // or
-        // needs to make the table diplaying stuff reset to have nothing in it.
         sortType = sort;
         stocks = [];
         iterator = 0;
         getStock(datalist[iterator]);
     }
     displayStocks("symbolAscending");
+
+    function sortFunction() {
+        document.getElementById("filterOptions").classList.toggle("show");
+    }
+
+    for (var i = 0; i < 18; i++) {
+            var row = document.getElementById(i + 1)
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = "...";
+
+            // Cell for company name
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = "...";
+
+            // Cell for Market cap
+            var cell3 = row.insertCell(2)
+            cell3.innerHTML = "...";
+
+            // Cell for price
+            var cell4 = row.insertCell(3);
+            cell4.innerHTML = "...";
+        }
 
 </script>
 
