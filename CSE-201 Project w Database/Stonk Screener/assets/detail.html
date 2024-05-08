@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Stock Details">
+    <meta name="author" content="DJLM Labs">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>Stock Details</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/cover/">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="detail.css" rel="stylesheet">
+
+</head>
+
+<body class="text-center">
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" onclick="goHome()" href="#">Home</a>
+                <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
+                <a class="nav-link" onclick="goSearch()" href="#">Search</a>
+                <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+                <a class="nav-link" onclick="toggleLearnerMode()" href="#">Toggle Learner Mode</a>
+                <a class="nav-link" onclick="addToWatchlist()" href="#">Add to watchlist</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
+            </nav>
+
+        </div>
+      </header>
+
+      <main role="main" class="inner cover">
+        <h1 class="cover-heading">Stock Details</h1>
+        <div class="lead" style="display: flex; justify-content: space-between;">
+            <p id="stock_company" class="stock_company">Loading...</p>
+            <p id="stock_ticker" class="stock_ticker"></p>
+        </div>
+        <div class="table">
+            <h3>Current Info</h3>
+            <table class="table table-dark table-striped custom-table caption-top">
+                <thead>
+                    <tr>
+                        <th scope="col">Attribute</th>
+                        <th scope="col">Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" id="price">Price</th>
+                        <td id="stock_price" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="openprice">Open Price</th>
+                        <td id="stock_open" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="high">High</th>
+                        <td id="stock_high" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="low">Low</th>
+                        <td id="stock_low" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="change">Percent Change</th>
+                        <td id="stock_change" class="stock_info"></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="col" id="cap">Market Cap</th>
+                        <td id="stock_marketcap" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="volume">Volume</th>
+                        <td id="stock_volume" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="beta">Beta</th>
+                        <td id="stock_beta" class="stock_info"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+
+    <!-- graph code begins here -->
+    <canvas id="graph" class="graph" width="1290px" height="575px"></canvas>
+    <script>
+        const cvas = document.getElementById('graph');
+        const ctx = cvas.getContext('2d');
+        let mousex = 0;
+        let mousey = 0;
+        cvas.addEventListener("mousemove", function(event) {
+            const canvasRect = cvas.getBoundingClientRect();
+            mousex = event.clientX - canvasRect.left;
+            mousey = event.clientY - canvasRect.top;
+        });
+        document.addEventListener("mousedown",(e)=>{
+            let switched = false;
+            for (var i=0;i<buttons.length;i++) {
+                if (buttons[i].highlight) {
+                    buttons[i].clickButton();
+                    switched = true;
+                }
+            }
+            if (switched) {
+                for (var i=0;i<buttons.length;i++) {
+                    if (buttons[i].highlight == false) {
+                        buttons[i].clicked = false;
+                    }
+                }
+            }
+        });
+        function toggleCanvasVisibility() {
+            cvas.style.display = (cvas.style.display === "none") ? "block" : "none";
+        }
+        toggleCanvasVisibility();
+    </script>
+    <!-- graph code ends here -->
+          <br><br><br>
+        <div class="table">
+            <h3>Analyst Recommendations</h3>
+            <table class="table table-dark table-striped custom-table caption-top">
+                <thead>
+                    <tr>
+                        <th scope="col">Attribute</th>
+                        <th scope="col">Values</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row" id="targethigh">Target High Price</th>
+                        <td id="target_high" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="targetlow">Target Low Price</th>
+                        <td id="target_low" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="targetmean">Target Mean Price</th>
+                        <td id="target_mean" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="targetmedian">Target Median Price</th>
+                        <td id="target_median" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="action">Recommended Action</th>
+                        <td id="target_action" class="stock_info"></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="col" id="recmean">Recommendation Mean</th>
+                        <td id="target_action_mean" class="stock_info"></td>
+                    </tr>
+                    <tr>
+                        <th scope="col" id="numanalysts">Number of Analysts</th>
+                        <td id="target_analysts" class="stock_info"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </main>
+
+      <footer class="mastfoot mt-auto">
+        <div class="inner">
+          <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+               alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+      </footer>
+    </div>
+
+    <script>
+        try {
+            var learnerMode = localStorage.getItem("learnermode");
+            if (learnerMode == "false") {
+                let ids = {
+                    "price": ``,
+                    "openprice": ``,
+                    "high": ``,
+                    "low": ``,
+                    "change": ``,
+                    "cap": ``,
+                    "volume": ``,
+                    "beta": ``,
+                    "targethigh": ``,
+                    "targetlow": ``,
+                    "targetmean": ``,
+                    "targetmedian": ``,
+                    "action": ``,
+                    "recmean": ``,
+                    "numanalysts": ``
+                };
+                for (const [element, text] of Object.entries(ids)) {
+                    document.getElementById(element).title = text;
+                }
+            } else {
+                let ids = {
+                    "price": `The price at which a stock is trading during the current trading session.`,
+                    "openprice": `The price at which a stock first trades upon the opening of an exchange on a trading day.`,
+                    "high": `The highest price at which a stock trades during a single trading day.`,
+                    "low": `The lowest price at which a stock trades during a single trading day.`,
+                    "change": `The percentage change in the stock's price as compared to the previous day's closing price.`,
+                    "cap": `The total market value of a company's outstanding shares of stock, calculated as current stock price times the total number of outstanding shares.`,
+                    "volume": `The total number of shares that have been traded during a specific time period. Volume is a key indicator of a security's liquidity and the level of activity or interest that traders have in it during a given time frame.`,
+                    "beta": `A measure of a stock's volatility in relation to the overall market. A beta greater than 1 indicates that the stock is more volatile than the market, while a beta less than 1 indicates that the stock is less volatile.`,
+                    "targethigh": `The highest price level predicted by analysts for the stock.`,
+                    "targetlow": `The lowest price level predicted by analysts for the stock.`,
+                    "targetmean": `The average price target set by analysts for the stock.`,
+                    "targetmedian": `The median price target set by analysts for the stock.`,
+                    "action": `Financial analysts give recommendations on stocks based on their research.`,
+                    "recmean": `The recommendation mean refers to the average of analyst recommendations for a particular stock, typically ranging from "buy" to "sell," indicating overall sentiment towards its investment potential.`,
+                    "numanalysts": `The total number of analysts who have provided ratings or forecasts for the stock.`
+                };
+                for (const [element, text] of Object.entries(ids)) {
+                    document.getElementById(element).title = text;
+                }
+            }
+        } catch (error) {
+            console.error("Error toggling learner mode:", error);
+        }
+
+        // this function starts the interval that updates the stock info every minute.
+        // it is a function, so it can be enabled in the console
+        function startUpdating() {
+            console.log("Stock updates are on.");
+            interval = setInterval(()=>getStockInfo(), (60000));
+        }
+        // comment the line of code below out if you're testing and want to save API tokens.
+        startUpdating();
+
+        /*
+        Retrieves up-to-date information about a stock from a modern source using an API call.
+        Utilizes the provided stock ticker stored locally and sends it to the server endpoint for data retrieval.
+        Parses the received data and updates the relevant HTML elements with the stock's details.
+        Displays error messages for invalid stocks or encountered errors during the process.
+        */
+        let stockname = 0;
+        let cvasvisible = false;
+        function getStockInfo() {
+            console.log("Getting stock info...");
+            const stockTicker = localStorage.getItem("ticker");
+            fetch("http://127.0.0.1:5000/getStockInfo", { // executing the getstockprice() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ticker: stockTicker}) // sending stockticker to getstockprice()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once getstockprice() is done
+
+                if (data.info != -1) { // if the stock is 'valid'
+
+                    try { // trying to set HTML tags to their correct info
+
+                        // the percent change variable is pretty long, and making a break in the code also makes
+                        // a break on the website, so the calculation is done here.
+                        // formula is ( (currentPrice - stockOpenPrice) / stockOpenPrice ) * 100
+                        // the reason stockOpenPrice is used because previousClose would involve getting the past
+                        // days data, but if that's a problem then tell me, and I'll make it use that.
+                        let percentChange = (((data.info["currentPrice"] - data.open) / data.open) * 100);
+
+                        // the left items is for the id of the HTML tags to set their text to.
+                        // the right items are what the tags will say.
+                        let stats = {
+                            "stock_company": `Name: ${data.info["shortName"]}`,
+                            "stock_ticker": `Symbol: $${data.info["symbol"]}`,
+                            "stock_price": `$${format(data.info["currentPrice"])}`,
+                            "stock_open": `$${format(data.open)}`,
+                            "stock_high": `$${format(data.high)}`,
+                            "stock_low": `$${format(data.low)}`,
+                            "stock_change": `${format(percentChange)}%`,
+                            "stock_marketcap": `$${format(data.info["marketCap"])}`,
+                            "stock_volume": `$${comma(data.info["volume"])}`,
+                            "stock_beta": `${data.info["beta"]}`,
+                            "target_high": `$${format(data.info["targetHighPrice"])}`,
+                            "target_low": `$${format(data.info["targetLowPrice"])}`,
+                            "target_mean": `$${format(data.info["targetMeanPrice"])}`,
+                            "target_median": `$${format(data.info["targetMedianPrice"])}`,
+                            "target_action": `${data.info["recommendationKey"].toUpperCase()}`,
+                            "target_action_mean": `${data.info["recommendationMean"]}`,
+                            "target_analysts": `${(data.info["numberOfAnalystOpinions"])}`
+                        };
+
+                        // this for loop goes through all the items in 'stats' above.
+                        // it then changes the HTML element and sets it to its correct text.
+                        // using a for loop to make the code look better.
+                        for (const [element, text] of Object.entries(stats)) {
+                            document.getElementById(element).innerText = text;
+                        }
+
+                        // sets the title of the page to include the stock ticker of the viewed stock
+                        //document.getElementById("title").innerText = `${data.info["symbol"]} Details`;
+
+                        // turns on the graph, and gets the 5 past days data as default
+                        if (cvasvisible == false) {
+                            getStockPast("5d");
+                            toggleCanvasVisibility();
+                            cvasvisible = true;
+                        }
+
+                        stockname = data.info["symbol"];
+
+                        console.log("Received stock info successfully.");
+
+                    } catch (error) { // if stock actually wasn't valid
+                        // this will happen if the user enters an index fund or something that is in the yfinance database,
+                        // but isn't a traditional stock. For now, it's an error, but maybe could be fixed in the future?
+                        console.warn("Received stock info successfully, but it is not a valid stock (most likely an index fund).");
+                        console.error(error.message);
+                        document.querySelectorAll(".table").forEach(table => {
+                            table.style.display = "none";
+                        });
+                    }
+
+                } else { // if invalid stock
+                    // sets error text where needed.
+                    errorText();
+                    document.querySelectorAll(".table").forEach(table => {
+                        table.style.display = "none";
+                    });
+                }
+
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+                document.querySelectorAll(".table").forEach(table => {
+                    table.style.display = "none";
+                });
+            });
+        } // end getStockInfo();
+
+        /*
+        Retrieves past stock data for a specified time period from a server endpoint.
+        Fetches historical data for the given stock ticker and time frame.
+        Converts the received date formats for compatibility and sends the processed data to a graph display function.
+        Handles errors encountered during the data retrieval process.
+        */
+        function getStockPast(time) {
+            console.log("Getting past " + str(time) + " data...");
+            const stockTicker = localStorage.getItem("ticker");
+            fetch("http://127.0.0.1:5000/getStockPast", { // executing the getStockPast() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ticker: stockTicker, time: time}) // sending stockticker to server.py()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once the data is recieved
+
+                // for some reason, javascript turns the python dates weird, so this for loop fixes them.
+                let dates = [];
+                for (var i=0;i<data.dates.length;i++) {
+                    tempdate = new Date(data.dates[i] + " EST");
+                    tempdate = tempdate.toLocaleDateString("en-US", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "2-digit"
+                    });
+                    dates.push(tempdate);
+                }
+                giveData(dates,data.values); // sending data to graph.js to be displayed
+
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+            });
+        } // end getStockPast();
+
+        // this function sets the text to display errors to what they need to be.
+        function errorText() {
+            console.error("Failed to receive stock data.");
+
+            // displaying correct text for errors where needed; i.e. the tab title, company name, and stock ticker.
+            document.getElementById("stock_company").style.whiteSpace = "pre-wrap";
+            document.getElementById("stock_company").innerText = `Invalid stock. `;
+            document.getElementById("stock_ticker").innerText = `Please enter a valid stock.`;
+        }
+
+        // this function removes the stock ticker from the storage for cleanliness, and directs the user back to index.html.
+        function goHome() {
+            localStorage.removeItem("ticker"); // deleting the stock ticker
+            window.location.href = "index.html"; // moving to index.html
+        }
+
+        // gets the stock info at least once to display just in case the updates are off.
+        getStockInfo();
+
+    </script>
+
+    <!-- getting the functions in useful_functions.js -->
+    <script src="useful_functions.js"></script>
+    <script src="graph.js"></script>
+
+    <!-- Navigation -->
+    <script>
+        function goWatch() {
+            window.location.href = "watch.html"; // moving to watch.html
+        }
+        function goSearch() {
+            window.location.href = "search.html"; // moving to search.html
+        }
+        function goLearn() {
+            window.location.href = "learn.html"; // moving to learn.html
+        }
+        function toggleLearnerMode() {
+            try {
+                var learnerMode = localStorage.getItem("learnermode");
+                if (learnerMode == "true") { // setting to false
+                    localStorage.setItem("learnermode", "false");
+                    let ids = {
+                        "price": ``,
+                        "openprice": ``,
+                        "high": ``,
+                        "low": ``,
+                        "change": ``,
+                        "cap": ``,
+                        "volume": ``,
+                        "beta": ``,
+                        "targethigh": ``,
+                        "targetlow": ``,
+                        "targetmean": ``,
+                        "targetmedian": ``,
+                        "action": ``,
+                        "recmean": ``,
+                        "numanalysts": ``
+                    };
+                    for (const [element, text] of Object.entries(ids)) {
+                        document.getElementById(element).title = text;
+                    }
+                } else { // setting to true
+                    localStorage.setItem("learnermode", "true");
+                    let ids = {
+                        "price": `The price at which a stock is trading during the current trading session.`,
+                        "openprice": `The price at which a stock first trades upon the opening of an exchange on a trading day.`,
+                        "high": `The highest price at which a stock trades during a single trading day.`,
+                        "low": `The lowest price at which a stock trades during a single trading day.`,
+                        "change": `The percentage change in the stock's price as compared to the previous day's closing price.`,
+                        "cap": `The total market value of a company's outstanding shares of stock, calculated as current stock price times the total number of outstanding shares.`,
+                        "volume": `The total number of shares that have been traded during a specific time period. Volume is a key indicator of a security's liquidity and the level of activity or interest that traders have in it during a given time frame.`,
+                        "beta": `A measure of a stock's volatility in relation to the overall market. A beta greater than 1 indicates that the stock is more volatile than the market, while a beta less than 1 indicates that the stock is less volatile.`,
+                        "targethigh": `The highest price level predicted by analysts for the stock.`,
+                        "targetlow": `The lowest price level predicted by analysts for the stock.`,
+                        "targetmean": `The average price target set by analysts for the stock.`,
+                        "targetmedian": `The median price target set by analysts for the stock.`,
+                        "action": `Financial analysts give recommendations on stocks based on their research.`,
+                        "recmean": `The recommendation mean refers to the average of analyst recommendations for a particular stock, typically ranging from "buy" to "sell," indicating overall sentiment towards its investment potential.`,
+                        "numanalysts": `The total number of analysts who have provided ratings or forecasts for the stock.`
+                    };
+                    for (const [element, text] of Object.entries(ids)) {
+                        document.getElementById(element).title = text;
+                    }
+                }
+            } catch (error) {
+                console.error("Error toggling learner mode:", error);
+            }
+        }
+        function addToWatchlist() {
+            if (localStorage.getItem("username") != "") {
+                if (hasStock(localStorage.getItem("stocks"),localStorage.getItem("ticker")) == false) {
+                    localStorage.setItem("stocks",localStorage.getItem("stocks")+localStorage.getItem("ticker")+";");
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+        function hasStock(stockz, thestock) {
+            let splitstocks = stockz.split(";");
+            for (var i = 0; i < splitstocks.length; i++) {
+                let stockSymbol = splitstocks[i].trim();
+                if (stockSymbol == thestock) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function goAccount() {
+            window.location.href = "login.html"; // moving to login.html
+        }
+    </script>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    <script src="js/vendor/popper.min.js"></script>
+    <script src="../dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+This project is a bit annoying to set up, so here are the requirements:
+
+1. Python
+https://www.python.org/downloads/
+You'll need python to run the project, so make sure you've got it installed, it's pretty straightforward.
+
+2. Imports, yfinance and flask
+To do this, you'll need to run 'pip install yfinance' and 'pip install flask' as well as 'pip install flask_cors' (more info below)
+This might need a bit of web searching but as a base here's how I think you do it on mac:
+
+-Open terminal
+-Check if python is installed with 'python --version'
+-Install pip if its not installed with 'sudo easy_install pip'
+
+Then you should hopefully be good to run the commands.
+
+The reason we need 'flask_cors' as well is because of security policies for webpages and such. I think it doesn't really need to be
+mentioned in our project since it's basically flask, but if you want to mention it let me know.
+
+3. Running the program
+There's 2 ways to run the program. The simple way is to just find the file 'Stonk Screener.py' and run it.
+The second way is to type 'python "Stonk Screener.py"' in the terminal. Make sure you're in the correct directory when doing this.
+
+You need to have these set up because the error screen for stocks will show if the server isn't connected.
+
+For Front End Development you'll want to edit index.html and detail.html for now, with the html tags and <style> sheets mainly.
+feel free to make any .css files to make it easier, you shouldnt really need to edit the javascript.
+
+ill try to answer any questions that arise either via text or in person when we meet.

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
+
+    <title>Stonk Screener</title>
+
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stonkStyles.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main role="main" class="inner cover">
+        <h1 class="cover-heading">Top Stocks</h1>
+        <p id="subtext">Loading...</p>
+        <br>
+        <div class = "dropdown">
+            <button onclick="sortFunction()" class="dropbtn">Filter</button>
+            <div id="filterOptions" class="dropdown-content">
+                <a onclick='displayStocks("symbolDescending")'>Symbols Z-A</a>
+                <a onclick='displayStocks("symbolAscending")'>Symbols A-Z</a>
+                <a onclick='displayStocks("nameDescending")'>Names Z-A</a>
+                <a onclick='displayStocks("nameAscending")'>Names A-Z</a>
+                <a onclick='displayStocks("marketCapDescending")'>Market Cap High-Low</a>
+                <a onclick='displayStocks("marketCapAscending")'>Market Cap Low-High</a>
+                <a onclick='displayStocks("currentPriceDescending")'>Price High-Low</a>
+                <a onclick='displayStocks("currentPriceAscending")'>Price Low-High</a>
+            </div>
+        </div>
+        <br>
+        <div class="table">
+            <table class="table table-dark table-striped custom-table sortable" id="topStocks">
+                <thead>
+                    <tr>
+                        <th scope="col">Symbol</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Market Cap</th>
+                        <th scope="col">Price</th>
+                    </tr>
+                </thead>
+                <tbody id="stockData">
+                <!-- Table body will be populated dynamically -->
+                    <tr id="1"></tr>
+                    <tr id="2"></tr>
+                    <tr id="3"></tr>
+                    <tr id="4"></tr>
+                    <tr id="5"></tr>
+                    <tr id="6"></tr>
+                    <tr id="7"></tr>
+                    <tr id="8"></tr>
+                    <tr id="9"></tr>
+                    <tr id="10"></tr>
+                    <tr id="11"></tr>
+                    <tr id="12"></tr>
+                    <tr id="13"></tr>
+                    <tr id="14"></tr>
+                    <tr id="15"></tr>
+                    <tr id="16"></tr>
+                    <tr id="17"></tr>
+                    <tr id="18"></tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img alt="Stonk Man meme" class="stonk-image"
+                    src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp">
+                DJLM Labs</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+
+    // the stock class allows simple storage of key info for a stock.
+    class Stock {
+        constructor(symbol, name, marketCap, currentPrice) {
+            this.symbol = symbol;
+            this.name = name;
+            this.marketCap = parseInt(marketCap);
+            this.currentPrice = parseFloat(currentPrice);
+        }
+        toString() { // prints a stock in a readable way
+            console.log(this.name + " - $" + this.symbol + "\n" +
+                        "Price: $" + format(this.currentPrice) + "\n" + 
+                        "Market Cap: $" + format(this.marketCap));
+        }
+    }
+
+    // Retrieves stock data for ticker, stores it, and moves on
+    function getStock(stock) {
+        console.log("Loading top stocks...");
+        fetch("http://127.0.0.1:5000/getStock", { // executing the getStock() function from server.py
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ticker: stock}) // sending ticker to getStock()
+        })
+        .then(response => response.json())
+        .then(data => { // this is the code that executes once getStock() is done
+
+            if (data.info != -1) { // if the stock is 'valid'
+                try {
+                    stocks.push(new Stock(data.info["symbol"],
+                                          data.info["shortName"],
+                                          data.info["marketCap"],
+                                          data.info["currentPrice"]));
+                    iterator++;
+                    if (iterator < datalist.length) {
+                        getStock(datalist[iterator]);
+                    } else {
+                        organizeStocks();
+                    }
+
+                } catch (error) { // if stock actually wasn't valid
+                    console.warn("Received stock info successfully, but it is not a valid stock (is it an index fund?)");
+                    console.error(error.message);
+                }
+            } else { // if invalid stock
+                console.error("Invalid stock.");
+            }
+
+        })
+        .catch(error => { // error handling
+            console.error("Error:", error);
+        });
+    } // end getStock();
+
+    function organizeStocks() {
+        var sortedStocks = [];
+        switch(sortType) {
+            case "symbolAscending":
+                sortedStocks = stocks.sort((a, b) => a.symbol.localeCompare(b.symbol));
+                break;
+            case "symbolDescending":
+                sortedStocks = stocks.sort((a, b) => b.symbol.localeCompare(a.symbol));
+                break;
+            case "nameAscending":
+                sortedStocks = stocks.sort((a, b) => a.name.localeCompare(b.name));
+                break;
+            case "nameDescending":
+                sortedStocks = stocks.sort((a, b) => b.name.localeCompare(a.name));
+                break;
+            case "marketCapAscending":
+                sortedStocks = stocks.sort((a, b) => a.marketCap - b.marketCap);
+                break;
+            case "marketCapDescending":
+                sortedStocks = stocks.sort((a, b) => b.marketCap - a.marketCap);
+                break;
+            case "currentPriceAscending":
+                sortedStocks = stocks.sort((a, b) => a.currentPrice - b.currentPrice);
+                break;
+            case "currentPriceDescending":
+                sortedStocks = stocks.sort((a, b) => b.currentPrice - a.currentPrice);
+                break;
+        }
+
+        for (var i = 0; i < 18; i++) {
+            var row = document.getElementById(i + 1)
+
+            //console.log(sortedStocks[i].toString());
+
+            // Cell for Symbol
+            var cell1 = row.cells.item(0);
+            cell1.innerHTML = `$${sortedStocks[i].symbol}`;
+
+            // Cell for company name
+            var cell2 = row.cells.item(1);
+            cell2.innerHTML = `${sortedStocks[i].name}`;
+
+            // Cell for Market cap
+            var cell3 = row.cells.item(2)
+            cell3.innerHTML = `$${format(sortedStocks[i].marketCap)}`;
+
+            // Cell for price
+            var cell4 = row.cells.item(3);
+            cell4.innerHTML = `$${format(sortedStocks[i].currentPrice)}`;
+
+        }
+        document.getElementById("subtext").innerText = "Stocks we are watching now!";
+    }
+
+    // Options:
+    //    symbolAscending, symbolDescending, 
+    //    nameAscending, nameDescending, 
+    //    marketCapAscending, marketCapDescending, 
+    //    currentPriceAscending, currentPriceDescending
+    var sortType = "symbolAscending";
+
+    var datalist = ["MSFT", "AAPL", "NVDA", "GOOGL", "AMZN", "META", "LLY",
+    "TSM", "AVGO", "TSLA", "NVO", "JPM", "V", "WMT", "CNK", "AGL", "WEN", "TXG"];
+
+    var stocks = [];
+    var iterator = 0;
+    function displayStocks(sort) {
+        sortType = sort;
+        stocks = [];
+        iterator = 0;
+        getStock(datalist[iterator]);
+    }
+    displayStocks("symbolAscending");
+
+    function sortFunction() {
+        document.getElementById("filterOptions").classList.toggle("show");
+    }
+
+    for (var i = 0; i < 18; i++) {
+            var row = document.getElementById(i + 1)
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = "...";
+
+            // Cell for company name
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = "...";
+
+            // Cell for Market cap
+            var cell3 = row.insertCell(2)
+            cell3.innerHTML = "...";
+
+            // Cell for price
+            var cell4 = row.insertCell(3);
+            cell4.innerHTML = "...";
+        }
+
+</script>
+
+<script src="useful_functions.js"></script>
+
+<!-- Navigation -->
+<script>
+    function goHome() {
+        window.location.href = "index.html"; // moving to index.html
+    }
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to watch.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to search.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to learn.html
+    }
+    function goAccount() {
+        window.location.href = "login.html"; // moving to login.html
+    }
+</script>
+
+</body>
+</html>

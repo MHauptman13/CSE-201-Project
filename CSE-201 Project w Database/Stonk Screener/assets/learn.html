@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
+
+    <title>Stonk Screener</title>
+
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stonkStyles.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main role="main" class="inner cover">
+            <h1 class="cover-heading">Glossary</h1>
+
+    <br>
+    <h3>These terms are part of the vocabulary used by professional investors and analysts in the stock market to understand, 
+        evaluate, and discuss publicly traded companies and their securities. Their meanings are essential for investors to 
+        understand the outlook of companies in which they might invest.</h3>
+    <br>
+    <h2>Symbol (Ticker):</h2>
+    <p>A unique series of letters assigned to a security for trading purposes. It acts as an abbreviation of the company's name. 
+        For example, AAPL is the ticker symbol for Apple Inc.</p>
+    <h2>Company Name:</h2>
+    <p>The legal name of the corporation whose shares are traded on the stock market. For instance, "Apple Inc." 
+        refers to the company known for its technology products and services.</p>
+    <h2>Sector:</h2>
+    <p>A segment of the economy into which companies are categorized based on their primary business activities. 
+        For example, Apple is classified in the Technology sector.</p>
+    <br>
+    <h3>Price & Relevant Statistics:</h3>
+    <p>The New York Stock Exchange (NYSE) and Nasdaq in the United States trade from 9:30 a.m. to 4 p.m. Eastern Time, 
+        with the first trade in the morning creating the opening price for a stock and the final trade at 4 p.m. providing 
+        the day's closing price. Markets are also closed on weekends and all federal holidays. </p>
+    <br>
+    <h2>Current Price:</h2>
+    <p>The price at which a stock is trading during the current trading session.</p>
+    <h2>Open:</h2>
+    <p>The price at which a stock first trades upon the opening of an exchange on a trading day.</p>
+    <h2>High:</h2>
+    <p>The highest price at which a stock trades during a single trading day.</p>
+    <h2>Low:</h2>
+    <p>The lowest price at which a stock trades during a single trading day.</p>
+    <h2>Close:</h2>
+    <p>The price of a stock at the end of a trading day (4:00 PM Eastern Time)</p>
+    <h2>Adjusted Close:</h2>
+    <p>The closing price after adjustments for all applicable splits and dividend distributions.</p>
+    <h2>Market Capitalization (Market Cap):</h2>
+    <p>The total market value of a company's outstanding shares of stock, calculated as current stock price times the total number of 
+        outstanding shares.</p>
+    <h2>Volume:</h2>
+    <p>The total number of shares that have been traded during a specific time period. Volume is a key indicator of a security's 
+        liquidity and the level of activity or interest that traders have in it during a given time frame.</p>
+    <h2>Beta:</h2>
+    <p>A measure of a stock's volatility in relation to the overall market. A beta greater than 1 indicates that the stock is more 
+        volatile than the market, while a beta less than 1 indicates that the stock is less volatile.</p>
+    <h2>Daily Percent Change:</h2>
+    <p>The percentage change in the stock's price as compared to the previous day's closing price. It is calculated using the 
+        formula [(current price - previous close) / previous close].</p>
+    <br>
+    <h3>Analyst Recommendation:</h3>
+    <br>
+    <h2>Analyst Recommendation:</h2>
+    <p>Financial analysts give recommendations on stocks based on their research, which can be classified as follows:</p>
+    <p>1. Buy - The stock is expected to significantly outperform the market.</p>
+    <p>2. Outperform - The stock is expected to outperform the market.</p>
+    <p>3. Hold - The stock is expected to perform in line with the market.</p>
+    <p>4. Underperform - The stock is expected to underperform the market.</p>
+    <p>5. Sell - The stock is expected to significantly underperform the market.</p>
+    <br>
+    <h2>Target High Price:</h2>
+    <p>The highest price level predicted by analysts for the stock.</p>
+    <h2>Target Low Price:</h2>
+    <p>The lowest price level predicted by analysts for the stock.</p>
+    <h2>Target Mean Price:</h2>
+    <p>The average price target set by analysts for the stock.</p>
+    <h2>Number of Analyst Opinions:</h2>
+    <p>The total number of analysts who have provided ratings or forecasts for the stock.</p>
+    </main>
+        <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+    </footer>
+</div>
+
+<!-- Navigation -->
+<script>
+    function goHome() {
+        window.location.href = "index.html"; // moving to index.html
+    }
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to watch.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to search.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to learn.html
+    }
+    function goAccount() {
+        window.location.href = "login.html"; // moving to login.html
+    }
+</script>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="js/vendor/popper.min.js"></script>
+<script src="../dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>
