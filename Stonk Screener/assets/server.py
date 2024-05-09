@@ -80,14 +80,14 @@ def tryForAccount():
     data = request.get_json()
     try:
         # sending the info back to the website
-        print(f"1 but also {data.get("password")} and of course {data.get("username")}")
-        query = f"SELECT * FROM user_information WHERE username='{data.get("username")}'"
+        print(f"1 but also {data.get('password')} and of course {data.get('username')}")
+        query = f"SELECT * FROM user_information WHERE username='{data.get('username')}'"
         print("2")
         cursor.execute(query)
         print("3")
         userInfo = cursor.fetchall()
         print("4")
-        if (userInfo[0][1] == data.get("password")):
+        if userInfo[0][1] == data.get("password"):
             print("5")
             return jsonify({"result": 0, "stocks": userInfo[0][2]})
         else:
@@ -104,8 +104,8 @@ def tryForAccount():
 def createAccount():
     if (dbgood):
         data = request.get_json()
-        print(f"OK we got {data.get("name")} and uh {data.get("pw")} yeah")
-        values = (data.get("name"), data.get("pw"), "")
+        print(f"OK we got {data.get('name')} and uh {data.get('pw')} yeah")
+        values = (data.get('name'), data.get('pw'), "")
         query = "INSERT INTO user_information (username, passwords, stockTickers) VALUES (%s, %s, %s)"
         cursor.execute(query, values)
         db.commit()
@@ -118,7 +118,7 @@ def createAccount():
 def deleteAccount():
     if (dbgood):
         data = request.get_json()
-        query = f"DELETE FROM user_information WHERE username='{data.get("username")}'"
+        query = f"DELETE FROM user_information WHERE username='{data.get('username')}'"
         cursor.execute(query)
         db.commit()
         return jsonify({"result": True})

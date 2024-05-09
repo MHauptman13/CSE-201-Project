@@ -1,29 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Stonk Screener</title>
-<style>
-    body {
-        background-color: #333;
-        color: #fff;
-        padding: 20px;
-    }
-</style>
-</head>
-<body>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
 
-    <h1>Log In</h1>
-    <h2><i>If you don't have an account, one will be created for you.</i></h2>
-    <input type="text" id="usrname" placeholder="Username">
+    <title>Stonk Screener</title>
+
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stonkStyles.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
+            </nav>
+
+        </div>
+    </header>
+
     <br>
-    <input type="text" id="usrpw" placeholder="Password">
-    <br>
-    <button onclick="tryForAccount()">Submit</button>
-    <button onclick="logout()">Log out</button>
-    <br>
-    <p id="res"></p>
+    <button class="logout" onclick="logout()">Log out</button>
+
+    <main class="login">
+        <br>
+        <h1>Log In</h1>
+        <h3>Enter your login credentials</h3>
+        <p><i>If you don't have an account, one will be created for you.</i></p>
+        <form action="">
+            <label for="usrname">Username:</label>
+            <input type="text" id="usrname" placeholder="Enter your Username">
+            <label for="usrpw">Password:</label>
+            <input type="text" id="usrpw" placeholder="Enter your Password">
+            <div class="wrap"> <button onclick="tryForAccount()">Submit</button></div>
+        </form>
+        <p id="res"></p>
+    </main>
+
+        <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+    </footer>
+</div>
 
     <script>
 
@@ -133,6 +172,16 @@
             window.location.href = "login.html"; // moving to login.html
         }
     </script>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="js/vendor/popper.min.js"></script>
+<script src="../dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>

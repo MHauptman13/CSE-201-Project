@@ -43,8 +43,77 @@ body {
 
 .cover-container {
   min-width: 50em;
+  max-width: 70em;
 }
 
+.logout {
+    display: inline-block;
+    width: fit-content;
+    background-color: #4CAF50;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.login {
+    background-color: #333;
+    border-radius: 15px;
+    box-shadow: inset 0 0 5rem rgba(0, 0, 0, .5);
+    padding: 10px 20px;
+    transition: transform 0.2s;
+    width: 500px;
+    text-align: center;
+    display: block;
+    margin: auto;
+
+    p {
+        font-size: 16px;
+    }
+
+    label {
+        display: block;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: left;
+        color: #555;
+        font-weight: bold;
+    }
+
+    input {
+        display: block;
+        width: 100%;
+        margin-bottom: 15px;
+        padding: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+
+    button {
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        border: none;
+        color: white;
+        cursor: pointer;
+        background-color: #4CAF50;
+        width: 100%;
+        font-size: 16px;
+    }
+
+    .wrap {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}
 
 /*
  * Header
@@ -200,7 +269,7 @@ h3 {
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
   position: relative;
-  display: inline-block;
+  display: -webkit-box;
 }
 
 /* Dropdown Content (Hidden by Default) */
