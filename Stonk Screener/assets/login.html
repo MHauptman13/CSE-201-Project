@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stonk Screener</title>
+<style>
+    body {
+        background-color: #333;
+        color: #fff;
+        padding: 20px;
+    }
+</style>
+</head>
+<body>
+
+    <h1>Log In</h1>
+    <h2><i>If you don't have an account, one will be created for you.</i></h2>
+    <input type="text" id="usrname" placeholder="Username">
+    <br>
+    <input type="text" id="usrpw" placeholder="Password">
+    <br>
+    <button onclick="tryForAccount()">Submit</button>
+    <button onclick="logout()">Log out</button>
+    <br>
+    <p id="res"></p>
+
+    <script>
+
+        function logout() {
+            localStorage.setItem("username","");
+            localStorage.setItem("password","");
+            localStorage.setItem("stocks","");
+            console.log("Logged out.");
+            document.getElementById("res").innerText = "Logged out.";
+        }
+
+        function tryForAccount() {
+            // try to get account from server
+            // if error, create new one
+            // if not, use it
+            let un = document.getElementById("usrname").value;
+            let pw = document.getElementById("usrpw").value;
+            fetch("http://127.0.0.1:5000/tryForAccount", { // executing the getstockprice() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({username: un, password: pw}) // sending stockticker to getstockprice()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once getstockprice() is done
+                if (data.result == 0) {
+                    localStorage.setItem("username",un);
+                    localStorage.setItem("password",pw);
+                    localStorage.setItem("stocks",data.stocks);
+                    console.log("Logged in as " + localStorage.getItem("username"));
+                    document.getElementById("res").innerText = "Logged in as " + localStorage.getItem("username") + ".";
+                } else if (data.result == 1) {
+                    console.log("Incorrect password.");
+                    document.getElementById("res").innerText = "Incorrect password.";
+                } else {
+                    console.log("Error no account found");
+                    createAccount(un,pw);
+                }
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+            });
+        }
+
+        function createAccount(name,pw) {
+            fetch("http://127.0.0.1:5000/createAccount", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({name: name, pw: pw})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.result) {
+                    console.log("New account created.");
+                    localStorage.setItem("username",data.un);
+                    localStorage.setItem("password",data.pw);
+                    localStorage.setItem("stocks",data.stocks);
+                    console.log("Logged in as " + localStorage.getItem("username"));
+                    document.getElementById("res").innerText = "No account found.\nCreated new account.";
+                } else {
+                    console.error("This was inevitable.");
+                    document.getElementById("res").innerText = "Error creating new account.";
+                }
+                
+            });
+        }
+
+        function deleteAccount(name) {
+            fetch("http://127.0.0.1:5000/deleteAccount", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({username: name})
+            })
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.result) {
+                    console.log("Account deleted.");
+                } else {
+                    console.error("Error deleting account.");
+                }
+                
+            });
+        }
+
+    </script>
+
+    <script>
+        function goHome() {
+            window.location.href = "index.html"; // moving to index.html
+        }
+        function goWatch() {
+            window.location.href = "watch.html"; // moving to watch.html
+        }
+        function goSearch() {
+            window.location.href = "search.html"; // moving to search.html
+        }
+        function goLearn() {
+            window.location.href = "learn.html"; // moving to learn.html
+        }
+        function goAccount() {
+            window.location.href = "login.html"; // moving to login.html
+        }
+    </script>
+
+</body>
+</html>

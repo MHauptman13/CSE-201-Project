@@ -18,7 +18,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
+    <link href="stonkStyles.css" rel="stylesheet">
 </head>
 
 <body class="text-center">
@@ -32,6 +32,7 @@
                 <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
                 <a class="nav-link" onclick="goSearch()" href="#">Search</a>
                 <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
             </nav>
 
         </div>
@@ -68,6 +69,9 @@
     }
     function goLearn() {
         window.location.href = "learn.html"; // moving to learn.html
+    }
+    function goAccount() {
+        window.location.href = "login.html"; // moving to login.html
     }
 </script>
 

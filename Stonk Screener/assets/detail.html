@@ -34,6 +34,8 @@
                 <a class="nav-link" onclick="goSearch()" href="#">Search</a>
                 <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
                 <a class="nav-link" onclick="toggleLearnerMode()" href="#">Toggle Learner Mode</a>
+                <a class="nav-link" onclick="addToWatchlist()" href="#">Add to watchlist</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
             </nav>
 
         </div>
@@ -466,6 +468,28 @@
             } catch (error) {
                 console.error("Error toggling learner mode:", error);
             }
+        }
+        function addToWatchlist() {
+            if (localStorage.getItem("username") != "") {
+                if (hasStock(localStorage.getItem("stocks"),localStorage.getItem("ticker")) == false) {
+                    localStorage.setItem("stocks",localStorage.getItem("stocks")+localStorage.getItem("ticker")+";");
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+        function hasStock(stockz, thestock) {
+            let splitstocks = stockz.split(";");
+            for (var i = 0; i < splitstocks.length; i++) {
+                let stockSymbol = splitstocks[i].trim();
+                if (stockSymbol == thestock) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function goAccount() {
+            window.location.href = "login.html"; // moving to login.html
         }
     </script>
 
