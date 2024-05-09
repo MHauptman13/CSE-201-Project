@@ -187,7 +187,7 @@
                 break;
         }
 
-        for (var i = 0; i < 18; i++) {
+        for (var i = 0; i < datalist.length; i++) {
             var row = document.getElementById(i + 1)
 
             //console.log(sortedStocks[i].toString());
@@ -209,7 +209,7 @@
             cell4.innerHTML = `$${format(sortedStocks[i].currentPrice)}`;
 
         }
-        document.getElementById("subtext").innerText = "Stocks we are watching now!";
+        document.getElementById("subtext").innerText = "Stocks you are watching now!";
     }
 
     // Options:
@@ -219,8 +219,18 @@
     //    currentPriceAscending, currentPriceDescending
     var sortType = "symbolAscending";
 
-    var datalist = ["MSFT", "AAPL", "NVDA", "GOOGL", "AMZN", "META", "LLY",
-    "TSM", "AVGO", "TSLA", "NVO", "JPM", "V", "WMT", "CNK", "AGL", "WEN", "TXG"];
+    function parseStockList(stockString) {
+        stockString = stockString.replace(/;+$/, '');
+        var stocks = stockString.split(";");
+        return stocks;
+    }
+
+    var datalist = null;
+    if (localStorage.getItem("stocks") == "") {
+        window.location.href = "search.html";
+    } else {
+        datalist = parseStockList(localStorage.getItem("stocks"));
+    }
 
     var stocks = [];
     var iterator = 0;
@@ -236,7 +246,7 @@
         document.getElementById("filterOptions").classList.toggle("show");
     }
 
-    for (var i = 0; i < 18; i++) {
+    for (var i = 0; i < datalist.length; i++) {
             var row = document.getElementById(i + 1)
             var cell1 = row.insertCell(0);
             cell1.innerHTML = "...";

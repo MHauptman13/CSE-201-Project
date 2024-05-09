@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossary</title>
-    <style>
-        body {
-            background-color: #333;
-            color: #fff;
-            padding: 20px;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
+    <meta content="Stock GUI Project" name="description">
+    <meta content="DJLM Labs" name="author">
+    <link href="/docs/4.0/assets/img/favicons/favicon.ico" rel="icon">
+
+    <title>Stonk Screener</title>
+
+    <link href="https://getbootstrap.com/docs/4.0/examples/cover/" rel="canonical">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="stonkStyles.css" rel="stylesheet">
 </head>
-<body>
 
-    <!--should be simple to make look good, this is just bare bones-->
-    <!--also this page was based on Jack's 'Terms and Definitions' page in the drive folder 'Learner Glossary'-->
+<body class="text-center">
 
-    <h1>Glossary</h1>
+<div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+        <div class="inner">
+            <h3 class="masthead-brand">Stonk Screener</h3>
+            <nav class="nav nav-masthead justify-content-center">
+                <a class="nav-link" href="#" onclick="goHome()">Home</a>
+                <a class="nav-link" href="#" onclick="goWatch()">Watch List</a>
+                <a class="nav-link" href="#" onclick="goSearch()">Search</a>
+                <a class="nav-link" href="#" onclick="goLearn()">Learn More</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main role="main" class="inner cover">
+            <h1 class="cover-heading">Glossary</h1>
+
     <br>
     <h3>These terms are part of the vocabulary used by professional investors and analysts in the stock market to understand, 
         evaluate, and discuss publicly traded companies and their securities. Their meanings are essential for investors to 
@@ -81,6 +104,43 @@
     <p>The average price target set by analysts for the stock.</p>
     <h2>Number of Analyst Opinions:</h2>
     <p>The total number of analysts who have provided ratings or forecasts for the stock.</p>
+    </main>
+        <footer class="mastfoot mt-auto">
+        <div class="inner">
+            <p><img src="https://upload.wikimedia.org/wikipedia/en/9/96/Meme_Man_on_transparent_background.webp"
+                    alt="Stonk Man meme" class="stonk-image"> DJLM Labs</p>
+        </div>
+    </footer>
+</div>
+
+<!-- Navigation -->
+<script>
+    function goHome() {
+        window.location.href = "index.html"; // moving to index.html
+    }
+    function goWatch() {
+        window.location.href = "watch.html"; // moving to watch.html
+    }
+    function goSearch() {
+        window.location.href = "search.html"; // moving to search.html
+    }
+    function goLearn() {
+        window.location.href = "learn.html"; // moving to learn.html
+    }
+    function goAccount() {
+        window.location.href = "login.html"; // moving to login.html
+    }
+</script>
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+<script src="js/vendor/popper.min.js"></script>
+<script src="../dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
