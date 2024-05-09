@@ -18,7 +18,7 @@
     <link href="../dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="detail.css" rel="stylesheet">
+    <link href="stonkStyles.css" rel="stylesheet">
 
 </head>
 
@@ -33,11 +33,15 @@
                 <a class="nav-link" onclick="goWatch()" href="#">Watch List</a>
                 <a class="nav-link" onclick="goSearch()" href="#">Search</a>
                 <a class="nav-link" onclick="goLearn()" href="#">Learn More</a>
-                <a class="nav-link" onclick="toggleLearnerMode()" href="#">Toggle Learner Mode</a>
+                <a class="nav-link" onclick="addToWatchlist()" href="#">Add to watchlist</a>
+                <a class="nav-link" href="#" onclick="goAccount()">Account</a>
             </nav>
 
         </div>
       </header>
+
+    <br>
+    <a class="logout" onclick="toggleLearnerMode()" href="#">Toggle Learner Mode</a>
 
       <main role="main" class="inner cover">
         <h1 class="cover-heading">Stock Details</h1>
@@ -395,6 +399,29 @@
             window.location.href = "index.html"; // moving to index.html
         }
 
+        function addStock(thestock) {
+            fetch("http://127.0.0.1:5000/addStock", { // executing the getStockPast() function from server.py
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({usr: localStorage.getItem("username"), stock: thestock}) // sending stockticker to server.py()
+            })
+            .then(response => response.json())
+            .then(data => { // this is the code that executes once the data is recieved
+
+                if (data.result) {
+                    console.log('good');
+                } else {
+                    console.log('bad');
+                }
+
+            })
+            .catch(error => { // error handling
+                console.error("Error:", error);
+            });
+        } 
+
         // gets the stock info at least once to display just in case the updates are off.
         getStockInfo();
 
@@ -466,6 +493,29 @@
             } catch (error) {
                 console.error("Error toggling learner mode:", error);
             }
+        }
+        function addToWatchlist() {
+            if (localStorage.getItem("username") != "") {
+                if (hasStock(localStorage.getItem("stocks"),localStorage.getItem("ticker")) == false) {
+                    localStorage.setItem("stocks",localStorage.getItem("stocks")+localStorage.getItem("ticker")+";");
+                    addStock(localStorage.getItem("ticker"));
+                }
+            } else {
+                window.location.href = "login.html";
+            }
+        }
+        function hasStock(stockz, thestock) {
+            let splitstocks = stockz.split(";");
+            for (var i = 0; i < splitstocks.length; i++) {
+                let stockSymbol = splitstocks[i].trim();
+                if (stockSymbol == thestock) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        function goAccount() {
+            window.location.href = "login.html"; // moving to login.html
         }
     </script>
 
