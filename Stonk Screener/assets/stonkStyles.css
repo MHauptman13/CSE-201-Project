@@ -216,6 +216,7 @@ h3 {
 .custom-table {
  table-layout: fixed;
  max-width: 55em;
+ margin: auto;
 }
   .custom-table thead tr, .custom-table thead th {
     padding-bottom: 30px;
